@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>EnviroTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── BRAND TOKENS ── */
+:root{
+  /* Core brand */
+  --forest:  #1A3D2B;
+  --emerald: #0F7A4E;
+  --lime:    #3DBC78;
+  --mint:    #A8EAC8;
+  --sky:     #0EA5E9;
+  --arctic:  #BAE8FF;
+  --slate:   #0F172A;
+  --graphite:#1E293B;
+  --neon:    #00FFB2;
+
+  /* Semantic — dark (default) */
+  --bg:      #0F172A;
+  --surface: #1E293B;
+  --raised:  #263548;
+  --card:    #192235;
+  --line:    rgba(61,188,120,0.12);
+  --line2:   rgba(255,255,255,0.06);
+  --text:    #F0FDF4;
+  --sub:     #64748B;
+  --sub2:    #334155;
+  --acc:     #3DBC78;
+  --acc-dim: rgba(61,188,120,0.12);
+  --acc-ink: #0F172A;
+  --neon-dim:rgba(0,255,178,0.10);
+  --sky-dim: rgba(14,165,233,0.12);
+  --warn:    #FBBF24;
+  --warn-dim:rgba(251,191,36,0.10);
+  --danger:  #F87171;
+  --danger-dim:rgba(248,113,113,0.10);
+  --scrim:   rgba(5,10,20,0.85);
+}
+[data-theme="light"]{
+  --bg:      #F0FDF4;
+  --surface: #FFFFFF;
+  --raised:  #DCFCE7;
+  --card:    #F7FEF9;
+  --line:    rgba(15,122,78,0.15);
+  --line2:   rgba(0,0,0,0.06);
+  --text:    #0F172A;
+  --sub:     #4B5563;
+  --sub2:    #9CA3AF;
+  --acc:     #0F7A4E;
+  --acc-dim: rgba(15,122,78,0.08);
+  --acc-ink: #FFFFFF;
+  --neon-dim:rgba(0,200,140,0.08);
+  --sky-dim: rgba(14,165,233,0.08);
+  --warn:    #B45309;
+  --warn-dim:rgba(180,83,9,0.08);
+  --danger:  #DC2626;
+  --danger-dim:rgba(220,38,38,0.08);
+  --scrim:   rgba(15,23,42,0.45);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+input,select,textarea,button{font-family:inherit;}
+body{
+  font-family:'DM Sans',sans-serif;
+  font-weight:400;
+  background:#060C14;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+
+/* ── PHONE SHELL ── */
+.phone{
+  width:390px;height:844px;
+  background:var(--bg);
+  border-radius:52px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:
+    0 0 0 1px rgba(61,188,120,0.15),
+    0 0 60px rgba(0,255,178,0.04),
+    0 40px 100px rgba(0,0,0,0.8);
+  transition:background .3s;
+}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:110px;height:30px;background:#000;border-radius:0 0 22px 22px;z-index:100;}
+.sb{height:48px;padding:14px 28px 0;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:40;}
+.sb-time{font-family:'Space Mono',monospace;font-size:12px;color:var(--text);letter-spacing:.5px;}
+.sb-icons{display:flex;gap:6px;align-items:center;}
+.sb-icons svg{width:14px;height:14px;stroke:var(--text);fill:none;stroke-width:1.6;}
+
+/* ── SCREENS ── */
+.screen{
+  position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:none;opacity:0;pointer-events:none;
+  transform:translateX(14px);
+  transition:opacity .22s,transform .22s,background .3s;
+  padding-bottom:90px;background:var(--bg);
+}
+.screen::-webkit-scrollbar{display:none;}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+
+/* ── TOP BARS ── */
+.tbar{
+  padding:48px 24px 14px;
+  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;z-index:20;
+  background:var(--bg);transition:background .3s;
+}
+.logo{display:flex;align-items:center;gap:0;}
+.logo-e{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+.logo-t{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--acc);letter-spacing:-.3px;}
+.logo-sub{font-family:'DM Sans',sans-serif;font-size:8px;font-weight:500;color:var(--sub);letter-spacing:2.5px;text-transform:uppercase;margin-left:2px;margin-top:2px;}
+
+.fbar{
+  padding:48px 24px 14px;
+  display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:20;
+  background:var(--bg);transition:background .3s;
+}
+.fbar-t{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+.fbar-s{font-size:11px;color:var(--sub);margin-top:1px;}
+
+/* ── UI ATOMS ── */
+.chip{
+  height:34px;width:34px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--line2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:transform .1s,border-color .15s;position:relative;
+}
+.chip:active{transform:scale(.92);}
+.chip:hover{border-color:var(--line);}
+.chip svg{width:15px;height:15px;stroke:var(--sub);fill:none;stroke-width:1.6;}
+.badge-num{
+  position:absolute;top:-4px;right:-4px;
+  min-width:16px;height:16px;
+  background:var(--lime);border-radius:8px;
+  border:2px solid var(--bg);
+  font-size:9px;font-weight:700;color:var(--slate);
+  display:flex;align-items:center;justify-content:center;padding:0 3px;
+}
+.av{
+  width:34px;height:34px;border-radius:12px;
+  background:var(--forest);border:1px solid var(--line);
+  font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--acc);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:transform .1s;
+}
+.av:active{transform:scale(.92);}
+.back{
+  width:34px;height:34px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--line2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:transform .1s;
+}
+.back:active{transform:scale(.92);}
+.back svg{width:15px;height:15px;stroke:var(--text);fill:none;stroke-width:2;}
+
+/* ── TYPOGRAPHY ── */
+.data-val{font-family:'Space Mono',monospace;}
+.section-head{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;color:var(--sub);
+  padding:0 24px;margin-bottom:10px;
+}
+
+/* ── LAYOUT ── */
+.divider{height:1px;background:var(--line2);margin:0 24px 20px;}
+.fbody{padding:0 24px;}
+.gap{height:10px;}
+.fl{margin-bottom:14px;}
+.fl-label{
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:600;letter-spacing:1.8px;
+  text-transform:uppercase;color:var(--sub);display:block;margin-bottom:7px;
+}
+.fi{
+  width:100%;
+  background:var(--surface);border:1px solid var(--line2);border-radius:12px;
+  padding:12px 14px;color:var(--text);font-size:14px;
+  outline:none;-webkit-appearance:none;
+  transition:border .15s,box-shadow .15s,background .3s;
+}
+.fi:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-dim);}
+.fi::placeholder{color:var(--sub);}
+.fi option{background:var(--surface);color:var(--text);}
+textarea.fi{resize:none;line-height:1.6;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pre-field{
+  background:var(--raised);border:1px solid var(--line2);
+  border-radius:12px;padding:12px 14px;margin-bottom:12px;
+}
+.pre-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--sub);margin-bottom:4px;}
+.pre-value{font-size:14px;color:var(--text);font-weight:500;}
+
+/* ── BUTTONS ── */
+.btn{
+  width:100%;padding:14px;border-radius:14px;border:none;
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:transform .1s,opacity .15s;letter-spacing:.3px;
+}
+.btn:active{transform:scale(.97);}
+.btn.prim{background:linear-gradient(135deg,var(--emerald),var(--acc));color:var(--acc-ink);}
+.btn.sec{background:var(--surface);color:var(--text);border:1px solid var(--line2);}
+.btn.warn{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(251,191,36,.2);}
+.btn.danger{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(248,113,113,.2);}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* ── PILLS ── */
+.pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;letter-spacing:.3px;}
+.pill-new{background:var(--acc-dim);color:var(--acc);}
+.pill-campo{background:var(--sky-dim);color:var(--sky);}
+.pill-done{background:var(--raised);color:var(--sub);}
+.pill-warn{background:var(--warn-dim);color:var(--warn);}
+.pill-danger{background:var(--danger-dim);color:var(--danger);}
+.pill-neon{background:var(--neon-dim);color:var(--neon);}
+
+/* ── HOME ── */
+.home-head{padding:4px 24px 20px;}
+.home-eye{font-size:11px;color:var(--sub);letter-spacing:2px;text-transform:uppercase;font-weight:500;}
+.home-name{
+  font-family:'Syne',sans-serif;font-size:26px;font-weight:800;
+  color:var(--text);margin-top:3px;line-height:1.2;
+}
+.home-name em{font-style:normal;color:var(--acc);}
+
+/* HERO METRIC */
+.hero-metric{
+  margin:0 24px 20px;
+  background:linear-gradient(135deg,var(--forest),var(--graphite));
+  border:1px solid var(--line);border-radius:20px;padding:20px;
+  position:relative;overflow:hidden;
+}
+.hero-metric::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,255,178,.07) 0%,transparent 70%);
+}
+.hm-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mint);margin-bottom:12px;}
+.hm-row{display:flex;align-items:flex-end;gap:20px;}
+.hm-val{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;color:var(--neon);line-height:1;}
+.hm-unit{font-size:12px;color:var(--sub);margin-bottom:4px;}
+.hm-divider{width:1px;height:32px;background:var(--line);}
+.hm-sub-val{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--text);line-height:1;}
+.hm-bar{margin-top:14px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+.hm-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--acc),var(--neon));width:0%;transition:width 1s ease;}
+.hm-bar-label{font-size:10px;color:var(--sub);margin-top:5px;display:flex;justify-content:space-between;}
+
+/* KPI GRID */
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px;margin-bottom:20px;}
+.kpi{
+  background:var(--surface);border:1px solid var(--line2);
+  border-radius:16px;padding:14px;transition:background .3s;
+}
+.kpi:hover{border-color:var(--line);}
+.kpi-icon{font-size:16px;margin-bottom:8px;}
+.kpi-val{font-family:'Space Mono',monospace;font-size:24px;font-weight:700;color:var(--text);}
+.kpi-label{font-size:11px;color:var(--sub);margin-top:2px;font-weight:500;}
+.kpi-sub{font-size:10px;color:var(--sub2);margin-top:1px;font-family:'Space Mono',monospace;}
+
+/* QUICK ACTIONS */
+.qa-grid{padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.qa-hero{
+  grid-column:1/-1;
+  background:linear-gradient(135deg,var(--emerald) 0%,var(--forest) 100%);
+  border:1px solid rgba(61,188,120,.3);border-radius:18px;
+  padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;
+  transition:transform .1s,opacity .15s;
+}
+.qa-hero:active{transform:scale(.98);}
+.qa-hero-icon{
+  width:42px;height:42px;border-radius:12px;
+  background:rgba(0,0,0,.2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.qa-hero-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.qa-hero-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px;}
+.qa-btn{
+  background:var(--surface);border:1px solid var(--line2);
+  border-radius:16px;padding:14px;cursor:pointer;
+  transition:transform .1s,border-color .15s;
+}
+.qa-btn:active{transform:scale(.97);}
+.qa-btn:hover{border-color:var(--line);}
+.qa-btn-icon{font-size:18px;margin-bottom:8px;}
+.qa-btn-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--text);}
+.qa-btn-sub{font-size:10px;color:var(--sub);margin-top:2px;}
+
+/* RECENT LIST */
+.rec-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);cursor:pointer;}
+.rec-item:last-child{border-bottom:none;}
+.rec-type-badge{
+  width:30px;height:30px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+}
+.rec-type-badge.nasc{background:var(--acc-dim);}
+.rec-type-badge.dren{background:var(--sky-dim);}
+.rec-type-badge.inst{background:var(--neon-dim);}
+.rec-info{flex:1;min-width:0;}
+.rec-code{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.5px;}
+.rec-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rec-meta{font-size:11px;color:var(--sub);margin-top:1px;}
+
+/* ── OS CARDS ── */
+.os-card{
+  background:var(--surface);border:1px solid var(--line2);
+  border-radius:16px;padding:16px;cursor:pointer;
+  transition:transform .1s,border-color .15s;
+}
+.os-card:active{transform:scale(.98);}
+.os-card:hover{border-color:var(--line);}
+.os-card.hi{border-color:rgba(61,188,120,.25);background:linear-gradient(135deg,var(--surface),rgba(15,122,78,.05));}
+.os-num{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px;margin-bottom:3px;}
+.os-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.os-client{font-size:11px;color:var(--sub);margin-bottom:10px;}
+.os-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.os-meta span{font-size:11px;color:var(--sub);}
+.prog-row{display:flex;align-items:center;gap:8px;}
+.prog-bar{flex:1;height:2px;background:var(--line2);border-radius:2px;}
+.prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--acc),var(--neon));}
+.prog-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--sub);white-space:nowrap;}
+
+/* ── CAMPAIGN BADGE ── */
+.camp-badge{
+  background:var(--sky-dim);border:1px solid rgba(14,165,233,.2);
+  border-radius:12px;padding:10px 14px;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.camp-badge-icon{font-size:16px;}
+.camp-badge-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--sky);}
+.camp-badge-sub{font-size:10px;color:var(--sub);margin-top:1px;}
+
+/* ── POINT CARDS ── */
+.pt-card{
+  background:var(--surface);border:1px solid var(--line2);
+  border-radius:14px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:all .1s;margin-bottom:8px;
+}
+.pt-card:active{transform:scale(.98);}
+.pt-card.nc{border-color:rgba(251,191,36,.2);background:var(--warn-dim);}
+.pt-card.done{opacity:.6;}
+.pt-card.danger{border-color:rgba(248,113,113,.2);}
+.pt-num{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--raised);border:1px solid var(--line2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--sub);flex-shrink:0;
+}
+.pt-num.done{background:var(--acc-dim);border-color:var(--line);color:var(--acc);}
+.pt-num.nc{background:var(--warn-dim);border-color:rgba(251,191,36,.3);color:var(--warn);}
+.pt-info{flex:1;min-width:0;}
+.pt-code{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.8px;}
+.pt-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pt-meta{font-size:11px;color:var(--sub);margin-top:1px;}
+
+/* ── TYPE BADGES ── */
+.type-ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.type-ico.nasc{background:var(--acc-dim);}
+.type-ico.dren,.type-ico.vert{background:var(--sky-dim);}
+.type-ico.inst{background:var(--neon-dim);}
+.type-badge{display:flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;}
+.type-badge.nasc{background:var(--acc-dim);color:var(--acc);}
+.type-badge.dren,.type-badge.vert{background:var(--sky-dim);color:var(--sky);}
+.type-badge.inst{background:var(--neon-dim);color:var(--neon);}
+
+/* ── POINT HEADER ── */
+.pt-header{margin:0 24px 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;}
+.pt-perm-code{
+  font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+  letter-spacing:2px;color:var(--acc);text-transform:uppercase;
+  padding:3px 8px;background:var(--acc-dim);border-radius:8px;
+  border:1px solid var(--line);
+}
+.pt-full-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.pt-desc{font-size:12px;color:var(--sub);line-height:1.5;}
+.pt-first{font-family:'Space Mono',monospace;font-size:9px;color:var(--sub2);margin-top:6px;letter-spacing:.5px;}
+
+/* ── PROGRESS STRIP ── */
+.prog-strip{padding:0 24px;margin-bottom:12px;}
+.ps-row{display:flex;justify-content:space-between;margin-bottom:5px;}
+.ps-label{font-size:11px;font-weight:500;color:var(--sub);}
+.ps-pct{font-family:'Space Mono',monospace;font-size:11px;color:var(--sub);}
+.ps-bar{height:3px;background:var(--line2);border-radius:2px;}
+.ps-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--neon));border-radius:2px;transition:width .4s;}
+
+/* ── CHECKLIST ── */
+.cl-wrap{margin:0 24px 14px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:12px 14px;}
+.cl-head{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:10px;}
+.cl-item{display:flex;align-items:center;gap:10px;padding:2px 0;}
+.cl-chk{
+  width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line2);
+  background:var(--raised);display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:transparent;flex-shrink:0;transition:all .2s;
+}
+.cl-chk.on{background:var(--acc);border-color:var(--acc);color:var(--acc-ink);}
+.cl-txt{font-size:13px;color:var(--text);flex:1;}
+.cl-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;background:var(--warn-dim);color:var(--warn);}
+.cl-badge.ok{background:var(--acc-dim);color:var(--acc);}
+
+/* ── GPS ── */
+.gps-block{background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px;margin-bottom:14px;}
+.gps-block.captured{border-color:var(--line);}
+.gps-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.gps-title{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);}
+.gps-status{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;}
+.gps-status.wait{background:var(--warn-dim);color:var(--warn);}
+.gps-status.ok{background:var(--acc-dim);color:var(--acc);}
+.gps-coords{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+.gps-coord{text-align:center;}
+.gps-coord-val{font-family:'Space Mono',monospace;font-size:13px;color:var(--text);display:flex;align-items:center;gap:3px;justify-content:center;}
+.gps-coord-label{font-size:9px;color:var(--sub);margin-top:1px;text-transform:uppercase;letter-spacing:.5px;}
+.gps-map{height:52px;background:var(--raised);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--sub);margin-bottom:10px;gap:6px;transition:background .2s;}
+.gps-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.gps-capture-btn{
+  width:100%;padding:10px;border-radius:10px;
+  background:var(--acc-dim);border:1px solid rgba(61,188,120,.25);
+  color:var(--acc);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;text-align:center;transition:all .15s;
+}
+.gps-capture-btn:active{transform:scale(.97);}
+.gps-capture-btn.done{background:linear-gradient(135deg,var(--emerald),var(--acc));color:var(--acc-ink);border-color:transparent;}
+.gps-sec-btn{background:var(--raised);border:1px solid var(--line2);color:var(--sub);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:10px;cursor:pointer;text-align:center;}
+
+/* ── PARAMS ── */
+.params-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;margin-top:2px;}
+.params-actions{display:flex;gap:6px;}
+.param-action{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 8px;border-radius:20px;cursor:pointer;white-space:nowrap;border:1px solid;letter-spacing:.3px;}
+.param-action.copy{background:var(--sky-dim);color:var(--sky);border-color:rgba(14,165,233,.2);}
+.param-action.skip{background:var(--raised);color:var(--sub);border-color:var(--line2);}
+.param-action.skip.on{background:var(--warn-dim);color:var(--warn);border-color:rgba(251,191,36,.3);}
+.param-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.pcard{background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px;position:relative;transition:border-color .2s;}
+.pcard.ok{border-color:rgba(61,188,120,.3);}
+.pcard.err{border-color:rgba(248,113,113,.3);}
+.pc-dot{position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--line2);}
+.pc-dot.ok{background:var(--acc);}
+.pc-dot.err{background:var(--danger);}
+.pc-label{font-size:10px;color:var(--sub);font-weight:500;margin-bottom:8px;}
+.pc-in{
+  width:100%;background:none;border:none;
+  border-bottom:1px solid var(--line2);
+  padding:2px 0 6px;
+  font-family:'Space Mono',monospace;font-size:20px;color:var(--text);
+  outline:none;-webkit-appearance:none;transition:border-color .15s;
+}
+.pc-in:focus{border-color:var(--acc);}
+.pc-unit{font-family:'Space Mono',monospace;font-size:9px;color:var(--sub);margin-top:4px;letter-spacing:.5px;}
+.pc-prev{font-size:10px;color:var(--sky);cursor:pointer;margin-top:3px;}
+.skip-banner{
+  display:none;background:var(--warn-dim);
+  border:1px solid rgba(251,191,36,.2);
+  border-radius:12px;padding:12px 14px;margin-bottom:14px;
+}
+.anomaly-alert{
+  display:none;background:var(--danger-dim);
+  border:1px solid rgba(248,113,113,.2);
+  border-radius:12px;padding:10px 12px;margin-bottom:14px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--danger);line-height:1.5;
+}
+.piez-section-header{display:flex;justify-content:space-between;align-items:center;grid-column:1/-1;padding:8px 0 4px;border-top:1px solid var(--line2);margin-top:4px;}
+.piez-section-title{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--sub);}
+
+/* ── PHOTOS ── */
+.photo-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.photo-types{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:8px;}
+.photo-types::-webkit-scrollbar{display:none;}
+.photo-chip{
+  height:26px;padding:0 10px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--line2);
+  font-size:11px;font-weight:600;color:var(--sub);white-space:nowrap;cursor:pointer;
+  transition:all .15s;flex-shrink:0;
+}
+.photo-chip.on{background:var(--sky-dim);border-color:rgba(14,165,233,.3);color:var(--sky);}
+.photo-guide{
+  background:var(--raised);border-radius:12px;
+  padding:10px 12px;margin-bottom:10px;
+  font-size:11px;color:var(--sub);line-height:1.6;
+}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
+.pthumb{
+  aspect-ratio:1;border-radius:12px;
+  background:var(--surface);border:1px dashed var(--line2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;font-size:20px;overflow:hidden;transition:transform .1s;position:relative;
+}
+.pthumb:active{transform:scale(.92);}
+.pthumb.filled{border-style:solid;}
+.pthumb.req{border-color:rgba(251,191,36,.3);}
+.pthumb.req.filled{border-color:rgba(61,188,120,.3);border-style:solid;}
+.pt-label-sm{font-size:8px;color:var(--sub);margin-top:4px;}
+.photo-ts{position:absolute;bottom:3px;left:3px;background:rgba(0,0,0,.65);border-radius:4px;padding:2px 4px;font-family:'Space Mono',monospace;font-size:7px;color:var(--neon);display:none;}
+.pthumb.filled .photo-ts{display:block;}
+
+/* ── OBS TAGS ── */
+.obs-section{margin-bottom:8px;}
+.obs-section-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.obs-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.obs-tag{
+  height:26px;padding:0 10px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--line2);
+  font-size:11px;color:var(--sub);cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;
+}
+.obs-tag.on{background:var(--acc-dim);border-color:var(--line);color:var(--acc);}
+
+/* ── NC ── */
+.nc-reasons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.nc-reason{
+  background:var(--surface);border:1px solid var(--line2);
+  border-radius:12px;padding:12px;text-align:center;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--sub);
+  transition:all .15s;
+}
+.nc-reason.on{background:var(--warn-dim);border-color:rgba(251,191,36,.3);color:var(--warn);}
+.nc-reason:active{transform:scale(.97);}
+.nc-reason-icon{font-size:18px;margin-bottom:4px;}
+
+/* ── STATUS SELECTOR ── */
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;}
+.status-opt{
+  background:var(--surface);border:1px solid var(--line2);
+  border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:all .15s;
+}
+.status-opt:active{transform:scale(.97);}
+.status-opt.on{border-color:var(--line);background:var(--acc-dim);}
+.status-opt-icon{font-size:16px;margin-bottom:3px;}
+.status-opt-label{font-size:11px;font-weight:500;color:var(--text);}
+
+/* ── FILTER BAR ── */
+.filter-bar{padding:0 24px 12px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.filter-bar::-webkit-scrollbar{display:none;}
+.filter-chip{
+  height:28px;padding:0 12px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--line2);
+  font-size:11px;font-weight:600;color:var(--sub);white-space:nowrap;
+  cursor:pointer;transition:all .15s;flex-shrink:0;
+}
+.filter-chip.on{background:var(--acc-dim);border-color:var(--line);color:var(--acc);}
+.search-bar{
+  margin:0 24px 12px;background:var(--surface);border:1px solid var(--line2);
+  border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;
+  transition:border-color .15s;
+}
+.search-bar:focus-within{border-color:var(--line);}
+.search-bar svg{width:14px;height:14px;stroke:var(--sub);fill:none;stroke-width:2;flex-shrink:0;}
+.search-bar input{background:none;border:none;outline:none;font-size:13px;color:var(--text);width:100%;}
+.search-bar input::placeholder{color:var(--sub);}
+
+/* ── REPORTS ── */
+.rep-filter-card{
+  margin:0 24px 16px;background:var(--surface);
+  border:1px solid var(--line2);border-radius:16px;padding:16px;
+}
+.rep-filter-title{
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;color:var(--sub);margin-bottom:14px;
+}
+.rep-filter-sub{
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;
+  color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;
+}
+
+/* ── HISTORY ── */
+.hist-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);cursor:pointer;}
+.hist-item:last-child{border-bottom:none;}
+.hist-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.hist-name{font-size:13px;font-weight:500;color:var(--text);}
+.hist-meta{font-family:'Space Mono',monospace;font-size:10px;color:var(--sub);margin-top:2px;}
+.hist-dl{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;cursor:pointer;}
+
+/* ── CALENDAR ── */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;transition:background .15s;position:relative;}
+.cal-day:active{opacity:.7;}
+.cal-day-num{font-family:'Space Mono',monospace;font-size:12px;color:var(--text);}
+.cal-day.today .cal-day-num{color:var(--acc);font-weight:700;}
+.cal-day.sel{background:linear-gradient(135deg,var(--emerald),var(--acc));}
+.cal-day.sel .cal-day-num{color:var(--acc-ink);font-weight:700;}
+.cal-day-dot{position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--acc);}
+.cal-event{
+  margin:0 24px 8px;background:var(--surface);
+  border:1px solid var(--line2);border-radius:14px;padding:14px 16px;cursor:pointer;
+  transition:border-color .15s;
+}
+.cal-event:hover{border-color:var(--line);}
+
+/* ── PROFILE ── */
+.ph-av{
+  width:72px;height:72px;border-radius:22px;
+  background:var(--forest);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--acc);margin-bottom:14px;
+  box-shadow:0 0 20px rgba(0,255,178,.08);
+}
+.pitem{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line2);cursor:pointer;}
+.pitem:last-child{border-bottom:none;}
+.pitem-icon{font-size:15px;width:22px;text-align:center;}
+.pitem-label{font-size:14px;color:var(--text);flex:1;}
+.pitem-val{font-family:'Space Mono',monospace;font-size:11px;color:var(--sub);}
+.pitem-arr{font-size:14px;color:var(--sub);}
+.tg{width:48px;height:26px;border-radius:100px;background:var(--raised);border:1px solid var(--line2);position:relative;cursor:pointer;transition:background .25s;flex-shrink:0;}
+.tg-k{width:18px;height:18px;border-radius:50%;background:var(--text);position:absolute;top:3px;left:3px;transition:transform .25s;display:flex;align-items:center;justify-content:center;font-size:10px;}
+[data-theme="light"] .tg-k{transform:translateX(22px);}
+
+/* ── MODALS ── */
+.overlay{
+  position:absolute;inset:0;background:var(--scrim);z-index:200;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(6px);
+}
+.overlay.open{opacity:1;pointer-events:all;}
+.sheet{
+  background:var(--graphite);border-radius:24px 24px 0 0;
+  padding:0 20px 40px;
+  transform:translateY(20px);transition:transform .25s,background .3s;
+  border-top:1px solid var(--line);
+}
+.overlay.open .sheet{transform:translateY(0);}
+.sheet-handle{width:32px;height:3px;background:var(--line);border-radius:2px;margin:12px auto 20px;}
+.sheet-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.sheet-sub{font-size:12px;color:var(--sub);margin-bottom:20px;line-height:1.5;}
+.sopts{display:flex;flex-direction:column;gap:8px;}
+.sopt{
+  background:var(--surface);border:1px solid var(--line2);
+  border-radius:14px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .1s;
+}
+.sopt:active{transform:scale(.98);}
+.sopt.hi{border-color:var(--line);background:var(--acc-dim);}
+.sopt.warn{border-color:rgba(251,191,36,.3);background:var(--warn-dim);}
+.sopt-icon{font-size:17px;flex-shrink:0;}
+.sopt-body{flex:1;}
+.sopt-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);}
+.sopt-desc{font-size:11px;color:var(--sub);margin-top:1px;}
+.sopt-arr{color:var(--sub);font-size:14px;}
+
+/* ── TOAST / AUTOSAVE ── */
+.toast{
+  position:absolute;bottom:100px;left:50%;
+  transform:translateX(-50%) translateY(14px);
+  background:var(--graphite);
+  border:1px solid var(--line);
+  color:var(--text);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  padding:10px 20px;border-radius:30px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:all .3s;z-index:300;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{border-color:var(--line);color:var(--neon);}
+@keyframes pulse-s{0%,100%{opacity:1;}50%{opacity:.3;}}
+.saving{animation:pulse-s .7s infinite;}
+
+/* ── BOTTOM NAV ── */
+.bnav{
+  position:absolute;bottom:0;left:0;right:0;height:82px;
+  background:var(--graphite);
+  border-top:1px solid var(--line2);
+  display:flex;align-items:flex-start;padding-top:12px;z-index:50;
+  transition:background .3s;
+}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:2px 0;transition:opacity .1s;}
+.ni:active{opacity:.6;}
+.ni svg{width:20px;height:20px;stroke:var(--sub);fill:none;stroke-width:1.6;transition:stroke .2s;}
+.ni-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);transition:color .2s;letter-spacing:.5px;text-transform:uppercase;}
+.ni.on svg{stroke:var(--acc);}
+.ni.on .ni-label{color:var(--acc);}
+
+/* NEON DOT PULSE */
+@keyframes neon-pulse{0%,100%{box-shadow:0 0 4px var(--neon);}50%{box-shadow:0 0 12px var(--neon),0 0 20px var(--neon);}}
+.neon-dot{animation:neon-pulse 2s infinite;background:var(--neon);}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="notch"></div>
+<div class="toast" id="toast"></div>
+<div class="sb">
+  <span class="sb-time">09:41</span>
+  <div class="sb-icons">
+    <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="15" height="11" rx="2"/><path d="M22 11v4"/></svg>
+  </div>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<div class="screen active" id="s-home">
+  <div class="tbar">
+    <div>
+      <div class="logo"><span class="logo-e">Enviro</span><span class="logo-t">Track</span></div>
+      <div class="logo-sub">Environmental Intelligence</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="chip" onclick="go('s-notif')">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="badge-num">2</div>
+      </div>
+      <div class="av" onclick="go('s-profile');nav('n-prof')">CA</div>
+    </div>
+  </div>
+
+  <div class="home-head">
+    <div class="home-eye">Sexta-feira · 21 Mar 2026</div>
+    <div class="home-name">Olá, <em>Carlos</em></div>
+  </div>
+
+  <!-- HERO METRIC -->
+  <div class="hero-metric">
+    <div class="hm-label">Campanha ativa · Vale Carajás</div>
+    <div class="hm-row">
+      <div><div class="hm-val">0</div><div style="font-size:10px;color:var(--sub);font-family:'Space Mono',monospace;margin-top:3px">PONTOS COLETADOS</div></div>
+      <div class="hm-divider"></div>
+      <div><div class="hm-sub-val">18</div><div style="font-size:10px;color:var(--sub);font-family:'Space Mono',monospace;margin-top:3px">TOTAL DA OS</div></div>
+      <div class="hm-divider"></div>
+      <div><div class="hm-sub-val" style="color:var(--warn)">3</div><div style="font-size:10px;color:var(--sub);font-family:'Space Mono',monospace;margin-top:3px">PENDENTES ENVIO</div></div>
+    </div>
+    <div class="hm-bar"><div class="hm-bar-fill" id="home-prog-fill" style="width:0%"></div></div>
+    <div class="hm-bar-label"><span>Progresso</span><span style="color:var(--neon)" id="home-prog-pct">0%</span></div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-icon">📡</div>
+      <div class="kpi-val">2</div>
+      <div class="kpi-label">Campanhas ativas</div>
+      <div class="kpi-sub">Vale · Cubatão</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">📍</div>
+      <div class="kpi-val">39</div>
+      <div class="kpi-label">Pontos na base</div>
+      <div class="kpi-sub">NAS · DRN · PZ</div>
+    </div>
+  </div>
+
+  <!-- OFFLINE WARN -->
+  <div style="margin:0 24px 18px;background:var(--warn-dim);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+    <span style="font-size:14px">🟡</span>
+    <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--warn)">3 coletas não enviadas</div><div style="font-size:11px;color:var(--sub);margin-top:1px">Sincronize quando houver sinal</div></div>
+    <div onclick="showToast('☁ Sincronizando…')" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--acc);background:var(--acc-dim);padding:5px 11px;border-radius:20px;cursor:pointer;letter-spacing:.3px">Enviar</div>
+  </div>
+
+  <div class="qa-grid">
+    <div class="qa-hero" onclick="go('s-campaigns');nav('n-collect')">
+      <div class="qa-hero-icon">⛏</div>
+      <div style="flex:1">
+        <div class="qa-hero-name">Iniciar coleta</div>
+        <div class="qa-hero-sub">Selecionar campanha e ponto</div>
+      </div>
+      <span style="font-size:16px;color:rgba(255,255,255,.4)">›</span>
+    </div>
+    <div class="qa-btn" onclick="go('s-reports');nav('n-reports')">
+      <div class="qa-btn-icon">📄</div>
+      <div class="qa-btn-name">Relatórios</div>
+      <div class="qa-btn-sub">PDF · Excel</div>
+    </div>
+    <div class="qa-btn" onclick="go('s-points-db')">
+      <div class="qa-btn-icon">📍</div>
+      <div class="qa-btn-name">Base de pontos</div>
+      <div class="qa-btn-sub">NAS · DRN · PZ</div>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:4px"></div>
+  <div class="section-head">Últimas coletas</div>
+  <div style="padding:0 24px">
+    <div class="rec-item">
+      <div class="rec-type-badge nasc">🌱</div>
+      <div class="rec-info">
+        <div class="rec-code">NAS-003</div>
+        <div class="rec-name">Cabeceira Igarapé Cristal</div>
+        <div class="rec-meta">Vale Carajás · Hoje 08:34 · pH 7.0</div>
+      </div>
+      <span class="pill pill-new">Enviado</span>
+    </div>
+    <div class="rec-item">
+      <div class="rec-type-badge inst">📏</div>
+      <div class="rec-info">
+        <div class="rec-code">PZ-004</div>
+        <div class="rec-name">Piezômetro P-04</div>
+        <div class="rec-meta">Vale Carajás · Ontem · Seco</div>
+      </div>
+      <span class="pill pill-warn">Pendente</span>
+    </div>
+    <div class="rec-item">
+      <div class="rec-type-badge dren">🌊</div>
+      <div class="rec-info">
+        <div class="rec-code">DRN-007</div>
+        <div class="rec-name">Saída Córrego Piçarrão</div>
+        <div class="rec-meta">Paulínia · 20 mar · Vazão 98 L/s</div>
+      </div>
+      <span class="pill pill-new">Enviado</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CAMPAIGNS HUB ═══ -->
+<div class="screen" id="s-campaigns">
+  <div class="tbar">
+    <div><div class="logo"><span class="logo-e">Enviro</span><span class="logo-t">Track</span></div><div class="logo-sub">Coletar</div></div>
+    <div class="av" onclick="go('s-profile');nav('n-prof')">CA</div>
+  </div>
+
+  <div style="margin:0 24px 20px;background:linear-gradient(135deg,var(--emerald),var(--forest));border:1px solid rgba(61,188,120,.3);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="go('s-avulsa')">
+    <div style="width:40px;height:40px;border-radius:12px;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">➕</div>
+    <div style="flex:1">
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff">Nova campanha</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Criar novo registro de monitoramento</div>
+    </div>
+    <span style="font-size:16px;color:rgba(255,255,255,.4)">›</span>
+  </div>
+
+  <div class="divider" style="margin-top:0"></div>
+  <div class="section-head">Campanhas ativas</div>
+  <div style="padding:0 24px;display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+
+    <div class="os-card hi" onclick="openCampaign('vale')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div><div class="os-num">#2.01.03.51042 · CAM-2026-03</div><div class="os-name">Vale Carajás</div><div class="os-client">Vale S.A. · Março 2026</div></div>
+        <span class="pill pill-neon">Nova</span>
+      </div>
+      <div class="os-meta"><span>🌱 9 Nascentes</span><span>🌊 4 Vertedouros</span><span>📏 5 Piez.</span></div>
+      <div class="prog-row"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><span class="prog-label">0 / 18</span></div>
+    </div>
+
+    <div class="os-card" onclick="openCampaign('cubatao')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div><div class="os-num">#2.02.01.52180 · CAM-2026-03</div><div class="os-name">Inventário Nascentes</div><div class="os-client">Cubatão S.A. · Março 2026</div></div>
+        <span class="pill pill-campo">Em campo</span>
+      </div>
+      <div class="os-meta"><span>🌱 12 Nascentes</span><span>📅 Prazo 30/03</span></div>
+      <div class="prog-row"><div class="prog-bar"><div class="prog-fill" style="width:33%"></div></div><span class="prog-label">4 / 12</span></div>
+    </div>
+
+    <div class="os-card" onclick="openCampaign('paulinia')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div><div class="os-num">#2.03.02.53391 · CAM-2026-03</div><div class="os-name">Medição de Drenagens</div><div class="os-client">Paulínia S.A. · Março 2026</div></div>
+        <span class="pill pill-neon">Nova</span>
+      </div>
+      <div class="os-meta"><span>🌊 9 Drenagens</span><span>📅 Prazo 25/03</span></div>
+      <div class="prog-row"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><span class="prog-label">0 / 9</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AVULSA ═══ -->
+<div class="screen" id="s-avulsa">
+  <div class="fbar">
+    <div class="back" onclick="go('s-campaigns')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t">Nova campanha</div><div class="fbar-s">Criar registro de monitoramento</div></div>
+  </div>
+  <div class="fbody">
+    <div style="margin-bottom:14px;background:var(--sky-dim);border:1px solid rgba(14,165,233,.2);border-radius:12px;padding:12px 14px;font-size:11px;color:var(--sky);line-height:1.6">ℹ Pontos cadastrados têm código único permanente. Selecione da base ao iniciar a coleta.</div>
+    <div class="fl"><label class="fl-label">Nome da campanha</label><input class="fi" type="text" placeholder="Ex: Monitoramento Q1 2026"></div>
+    <div class="fl"><label class="fl-label">Centro de custo</label><input class="fi" type="text" placeholder="Ex: CC-2026-VALE-PA"></div>
+    <div class="fl"><label class="fl-label">Gerente responsável</label><input class="fi" type="text" placeholder="Nome do gerente"></div>
+    <div class="fl"><label class="fl-label">Tipo de trabalho</label>
+      <select class="fi">
+        <option value="" disabled selected>Selecione</option>
+        <option>🌱 Inventário de nascentes</option>
+        <option>🌊 Monitoramento de drenagens</option>
+        <option>📏 Monitoramento de instrumentos</option>
+        <option>⚗ Parâmetros físico-químicos</option>
+        <option>📋 Múltiplos tipos</option>
+      </select>
+    </div>
+    <div class="frow">
+      <div class="fl"><label class="fl-label">Data início</label><input class="fi" type="date" value="2026-03-21"></div>
+      <div class="fl"><label class="fl-label">Hora</label><input class="fi" type="time" value="09:00"></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span class="fl-label" style="margin:0">Condições climáticas</span>
+        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--acc);background:var(--acc-dim);padding:3px 9px;border-radius:20px">Auto GPS</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:12px">
+        <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--neon)">24°</div><div style="font-size:10px;color:var(--sub)">Temp</div></div>
+        <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--text)">72%</div><div style="font-size:10px;color:var(--sub)">Umidade</div></div>
+        <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--text)">12km/h</div><div style="font-size:10px;color:var(--sub)">Vento</div></div>
+      </div>
+      <select class="fi" style="font-size:13px;padding:10px 14px"><option>☀ Ensolarado</option><option>⛅ Parcialmente nublado</option><option>🌧 Chuva leve</option><option>⛈ Tempestade</option></select>
+    </div>
+    <button class="btn prim" onclick="go('s-point-select');nav('n-collect')">Selecionar pontos →</button>
+    <div class="gap"></div><div class="gap"></div>
+  </div>
+</div>
+
+<!-- ═══ OS DETAIL ═══ -->
+<div class="screen" id="s-os">
+  <div class="fbar">
+    <div class="back" onclick="go('s-campaigns');nav('n-collect')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t" id="os-title">Campanha</div><div class="fbar-s" id="os-sub">#—</div></div>
+  </div>
+
+  <div style="padding:0 24px 14px">
+    <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--sub);margin-bottom:4px" id="os-proj-num">PROJETO · —</div>
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);line-height:1.2" id="os-proj-name">—</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px" id="os-tags"></div>
+  </div>
+
+  <div class="camp-badge" style="margin:0 24px 14px">
+    <span class="camp-badge-icon">📅</span>
+    <div><div class="camp-badge-title" id="os-camp-label">Campanha — Março 2026</div><div class="camp-badge-sub" id="os-camp-sub">Evento periódico de monitoramento</div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 24px;margin-bottom:14px">
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:12px"><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Cliente</div><div style="font-size:13px;color:var(--text);font-weight:500" id="os-client">—</div></div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:12px"><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Gerente</div><div style="font-size:13px;color:var(--text);font-weight:500" id="os-ger">—</div></div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:12px"><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Prazo</div><div style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text);font-weight:500" id="os-prazo">—</div></div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:12px"><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">C. Custo</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text);font-weight:500" id="os-cc">—</div></div>
+  </div>
+
+  <div style="margin:0 24px 14px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px">
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Total de pontos</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text);font-weight:700" id="os-total">—</span></div>
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Tipos</span><span style="font-size:12px;color:var(--text);font-weight:600" id="os-tipos">—</span></div>
+    <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:12px;color:var(--sub)">Concluídos</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--acc);font-weight:700" id="os-done-count">0 / —</span></div>
+  </div>
+
+  <div class="section-head">Pontos da campanha</div>
+  <div style="padding:0 24px;margin-bottom:16px" id="points-list"></div>
+  <div class="fbody">
+    <button class="btn prim" id="btn-start-os" onclick="go('s-start-task')" style="margin-bottom:8px">Iniciar trabalho de campo</button>
+    <div class="gap"></div>
+  </div>
+</div>
+
+<!-- ═══ POINT SELECT ═══ -->
+<div class="screen" id="s-point-select">
+  <div class="fbar">
+    <div class="back" onclick="go('s-campaigns')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t">Selecionar ponto</div><div class="fbar-s">Pontos cadastrados permanentes</div></div>
+  </div>
+  <div class="search-bar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Código ou nome…"></div>
+  <div class="filter-bar">
+    <div class="filter-chip on" onclick="filterChip(this)">Todos</div>
+    <div class="filter-chip" onclick="filterChip(this)">🌱 NAS</div>
+    <div class="filter-chip" onclick="filterChip(this)">🌊 DRN/VRT</div>
+    <div class="filter-chip" onclick="filterChip(this)">📏 PZ</div>
+    <div class="filter-chip" onclick="filterChip(this)">📍 Próximos</div>
+    <div class="filter-chip" onclick="filterChip(this)">⏳ Pendentes</div>
+  </div>
+  <div style="margin:0 24px 14px;background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="go('s-new-point')">
+    <span style="font-size:18px">🆕</span>
+    <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text)">Cadastrar novo ponto</div><div style="font-size:11px;color:var(--sub);margin-top:1px">Gera código único permanente</div></div>
+    <span style="font-size:14px;color:var(--acc)">›</span>
+  </div>
+  <div style="padding:0 24px;display:flex;flex-direction:column;gap:1px" id="point-select-list"></div>
+</div>
+
+<!-- ═══ NEW POINT ═══ -->
+<div class="screen" id="s-new-point">
+  <div class="fbar">
+    <div class="back" onclick="go('s-point-select')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t">Novo ponto</div><div class="fbar-s">Código permanente gerado automaticamente</div></div>
+  </div>
+  <div class="fbody">
+    <div style="margin-bottom:16px;background:var(--acc-dim);border:1px solid var(--line);border-radius:12px;padding:14px 16px">
+      <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:6px">Código permanente</div>
+      <div style="font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--neon)" id="new-pt-code">NAS-040</div>
+      <div style="font-size:11px;color:var(--sub);margin-top:4px">Único, não reutilizável, permanente na base de dados</div>
+    </div>
+    <div class="fl">
+      <label class="fl-label">Tipo do ponto</label>
+      <select class="fi" id="new-pt-type" onchange="updateNewPtCode()">
+        <option value="NAS">🌱 Nascente (NAS-)</option>
+        <option value="DRN">🌊 Drenagem (DRN-)</option>
+        <option value="VRT">🌊 Vertedouro (VRT-)</option>
+        <option value="PZ">📏 Piezômetro (PZ-)</option>
+      </select>
+    </div>
+    <div class="fl"><label class="fl-label">Nome descritivo</label><input class="fi" type="text" placeholder="Ex: Afloramento encosta norte"></div>
+    <div class="fl"><label class="fl-label">Projeto de origem</label><input class="fi" type="text" placeholder="Ex: Vale Carajás"></div>
+    <div class="fl"><label class="fl-label">Descrição</label><textarea class="fi" rows="3" placeholder="Localização, características, referências de campo…"></textarea></div>
+    <div class="fl-label" style="margin-bottom:8px">GPS do ponto (cadastro inicial)</div>
+    <div class="gps-block" id="new-pt-gps">
+      <div class="gps-top"><span class="gps-title">GPS do ponto</span><span class="gps-status wait" id="new-gps-status">Aguardando</span></div>
+      <div class="gps-capture-btn" onclick="captureGPS('new')">📍 Capturar localização</div>
+    </div>
+    <div class="fl" style="margin-top:14px"><label class="fl-label">Status inicial</label><select class="fi"><option>✅ Ativo</option><option>⚠ Provisório</option></select></div>
+    <button class="btn prim" onclick="showToast('✅ NAS-040 cadastrado!');go('s-point-select')" style="margin-bottom:8px">Cadastrar ponto</button>
+    <div class="gap"></div>
+  </div>
+</div>
+
+<!-- ═══ POINTS DATABASE ═══ -->
+<div class="screen" id="s-points-db">
+  <div class="fbar">
+    <div class="back" onclick="go('s-home');nav('n-home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t">Base de pontos</div><div class="fbar-s">Registros permanentes · 39 pontos</div></div>
+  </div>
+  <div class="search-bar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Buscar por código ou nome…"></div>
+  <div class="filter-bar">
+    <div class="filter-chip on" onclick="filterChip(this)">Todos</div>
+    <div class="filter-chip" onclick="filterChip(this)">🌱 Nascentes</div>
+    <div class="filter-chip" onclick="filterChip(this)">🌊 Drenagens</div>
+    <div class="filter-chip" onclick="filterChip(this)">📏 Piezômetros</div>
+    <div class="filter-chip" onclick="filterChip(this)">✅ Ativos</div>
+    <div class="filter-chip" onclick="filterChip(this)">⚠ Inativos</div>
+  </div>
+  <div style="padding:0 24px;display:flex;flex-direction:column;gap:1px" id="db-list"></div>
+</div>
+
+<!-- ═══ START TASK ═══ -->
+<div class="screen" id="s-start-task">
+  <div class="fbar">
+    <div class="back" onclick="go('s-os')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t">Iniciar campo</div><div class="fbar-s">Dados de início da campanha</div></div>
+  </div>
+  <div class="fbody">
+    <div style="margin-bottom:14px;font-size:11px;color:var(--sub);line-height:1.6;background:var(--raised);border-radius:12px;padding:12px 14px">🔒 Campos pré-preenchidos pela plataforma. Confirme data, clima e GPS.</div>
+    <div class="pre-field"><div class="pre-label">Projeto / Campanha</div><div class="pre-value" id="st-proj">—</div></div>
+    <div class="pre-field"><div class="pre-label">Cliente</div><div class="pre-value" id="st-client">—</div></div>
+    <div class="pre-field"><div class="pre-label">Tipo de trabalho</div><div class="pre-value" id="st-tipo">—</div></div>
+    <div class="frow">
+      <div class="fl"><label class="fl-label">Data início</label><input class="fi" type="date" value="2026-03-21"></div>
+      <div class="fl"><label class="fl-label">Hora</label><input class="fi" type="time" value="09:00"></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span class="fl-label" style="margin:0">Clima</span>
+        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--acc);background:var(--acc-dim);padding:3px 9px;border-radius:20px">Auto GPS</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:12px">
+        <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--neon)">24°</div><div style="font-size:10px;color:var(--sub)">Temp</div></div>
+        <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--text)">72%</div><div style="font-size:10px;color:var(--sub)">Umidade</div></div>
+        <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--text)">12km/h</div><div style="font-size:10px;color:var(--sub)">Vento</div></div>
+      </div>
+      <select class="fi" style="font-size:13px;padding:10px 14px"><option>☀ Ensolarado</option><option>⛅ Parcialmente nublado</option><option>🌧 Chuva leve</option></select>
+    </div>
+    <div class="gps-block" id="start-gps">
+      <div class="gps-top"><span class="gps-title">GPS de início</span><span class="gps-status wait" id="start-gps-status">Aguardando</span></div>
+      <div class="gps-coords">
+        <div class="gps-coord"><div class="gps-coord-val" id="start-lat">—</div><div class="gps-coord-label">Latitude</div></div>
+        <div class="gps-coord"><div class="gps-coord-val" id="start-lng">—</div><div class="gps-coord-label">Longitude</div></div>
+        <div class="gps-coord"><div class="gps-coord-val" id="start-acc-val">—</div><div class="gps-coord-label">Precisão</div></div>
+      </div>
+      <div class="gps-capture-btn" id="start-gps-btn" onclick="captureGPS('start')">📍 Capturar localização de início</div>
+    </div>
+    <div class="fl" style="margin-top:14px"><label class="fl-label">Observações de início</label><textarea class="fi" rows="2" placeholder="Condições de acesso, equipe, veículo…"></textarea></div>
+    <button class="btn prim" onclick="go('s-collect-point');setPoint(0)">Iniciar coleta nos pontos →</button>
+    <div class="gap"></div>
+  </div>
+</div>
+
+<!-- ═══ COLLECT POINT ═══ -->
+<div class="screen" id="s-collect-point">
+  <div class="fbar" style="padding-bottom:10px">
+    <div class="back" onclick="go('s-os')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div style="flex:1;min-width:0">
+      <div class="fbar-t" id="cp-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
+      <div class="fbar-s" id="cp-sub">Ponto 1 / —</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <div id="sync-dot" style="width:7px;height:7px;border-radius:50%;background:var(--acc)" class="neon-dot"></div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub);background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:4px 8px" id="cp-time">🕐 09:14</div>
+    </div>
+  </div>
+
+  <div class="prog-strip">
+    <div class="ps-row"><span class="ps-label" id="cp-prog-label">Ponto 1 de —</span><span class="ps-pct" id="cp-prog-pct">0%</span></div>
+    <div class="ps-bar"><div class="ps-fill" id="cp-prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="cl-wrap">
+    <div class="cl-head">Checklist do ponto</div>
+    <div class="cl-item"><div class="cl-chk" id="cl-gps">✓</div><div class="cl-txt">GPS do ponto</div><div class="cl-badge" id="clb-gps">Pendente</div></div>
+    <div class="cl-item" style="margin-top:6px"><div class="cl-chk" id="cl-params">✓</div><div class="cl-txt">Parâmetros</div><div class="cl-badge" id="clb-params">0 preenchidos</div></div>
+    <div class="cl-item" style="margin-top:6px"><div class="cl-chk" id="cl-photos">✓</div><div class="cl-txt">Fotos obrigatórias</div><div class="cl-badge" id="clb-photos">0 / 3</div></div>
+  </div>
+
+  <div class="pt-header">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+          <span class="pt-perm-code" id="cp-code">NAS-001</span>
+          <div class="type-badge nasc" id="cp-type-badge">🌱 Nascente</div>
+        </div>
+        <div class="pt-full-name" id="cp-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
+      </div>
+    </div>
+    <div class="pt-desc" id="cp-desc">—</div>
+    <div class="pt-first" id="cp-first-camp">PRIMEIRO CADASTRO: —</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+      <div id="dist-badge" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--acc-dim);color:var(--acc);display:flex;align-items:center;gap:5px;letter-spacing:.3px"><span id="dist-txt">Calculando…</span></div>
+      <div onclick="showToast('Abrindo Google Maps…')" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--sky-dim);color:var(--sky);cursor:pointer;letter-spacing:.3px">🗺 Maps</div>
+    </div>
+  </div>
+
+  <div class="fbody">
+    <div id="inst-status-block" style="display:none;margin-bottom:14px">
+      <div class="fl-label" style="margin-bottom:10px">Status atual do instrumento</div>
+      <div class="status-grid">
+        <div class="status-opt on" onclick="selectStatus(this)"><div class="status-opt-icon">✅</div><div class="status-opt-label">Ativo</div></div>
+        <div class="status-opt" onclick="selectStatus(this)"><div class="status-opt-icon">⏸</div><div class="status-opt-label">Inativo</div></div>
+        <div class="status-opt" onclick="selectStatus(this)"><div class="status-opt-icon">⚠</div><div class="status-opt-label">Danificado</div></div>
+        <div class="status-opt" onclick="selectStatus(this)"><div class="status-opt-icon">💀</div><div class="status-opt-label">Destruído</div></div>
+      </div>
+    </div>
+
+    <div class="gps-block" id="pt-gps-block">
+      <div class="gps-top"><span class="gps-title">GPS do ponto</span><span class="gps-status wait" id="pt-gps-status">Aguardando</span></div>
+      <div class="gps-coords">
+        <div class="gps-coord"><div class="gps-coord-val" id="pt-lat">—</div><div class="gps-coord-label">Latitude</div></div>
+        <div class="gps-coord"><div class="gps-coord-val" id="pt-lng">—</div><div class="gps-coord-label">Longitude</div></div>
+        <div class="gps-coord"><div class="gps-coord-val"><span id="pt-acc-dot" style="width:8px;height:8px;border-radius:50%;background:var(--sub2);display:inline-block"></span><span id="pt-acc-val" style="margin-left:3px">—</span></div><div class="gps-coord-label">Precisão</div></div>
+      </div>
+      <div id="pt-map" class="gps-map">🗺 Capturar GPS para visualizar</div>
+      <div class="gps-btns">
+        <div class="gps-capture-btn" id="pt-gps-btn" onclick="captureGPS('pt')">📍 Capturar</div>
+        <div class="gps-sec-btn" onclick="useLastGPS()">🕐 Última válida</div>
+      </div>
+    </div>
+
+    <div class="params-header">
+      <div class="fl-label" style="margin:0" id="params-title">Parâmetros</div>
+      <div class="params-actions">
+        <div class="param-action copy" onclick="copyLastPoint()">↩ Anterior</div>
+        <div class="param-action skip" id="skip-btn" onclick="toggleSkip()"><span id="skip-icon">🚫</span> <span id="skip-label">Não monitorar</span></div>
+      </div>
+    </div>
+    <div class="skip-banner" id="skip-banner">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px">⚠</span><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--warn)">Parâmetros não monitorados</div><div style="font-size:11px;color:var(--sub);margin-top:1px">Justifique para validação do analista.</div></div><div onclick="toggleSkip()" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--acc);cursor:pointer;padding:3px 8px;background:var(--acc-dim);border-radius:20px">Desfazer</div></div>
+      <textarea class="fi" rows="2" placeholder="Motivo: equipamento, acesso, condição do ponto…" style="margin-top:10px;font-size:12px;padding:10px 12px"></textarea>
+    </div>
+    <div class="param-grid" id="param-grid"></div>
+    <div class="anomaly-alert" id="anomaly-alert"></div>
+
+    <div style="background:var(--sky-dim);border:1px solid rgba(14,165,233,.15);border-radius:12px;padding:10px 12px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+      <span style="font-size:14px">🔵</span>
+      <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--sky)">Sensor Bluetooth</div><div style="font-size:10px;color:var(--sub)">Nenhum conectado · Entrada manual</div></div>
+      <span onclick="showToast('Buscando sensores…')" style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--sky);background:var(--sky-dim);padding:3px 8px;border-radius:20px;cursor:pointer">Buscar</span>
+    </div>
+
+    <div class="photo-header">
+      <div class="fl-label" style="margin:0">Registro fotográfico</div>
+      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--sub)">Obrig.: <span id="photo-count" style="font-weight:700;color:var(--acc)">0</span>/3</div>
+    </div>
+    <div class="photo-types" id="photo-types">
+      <div class="photo-chip on">Geral</div>
+      <div class="photo-chip">Detalhe</div>
+      <div class="photo-chip">Equipamento</div>
+      <div class="photo-chip">Adicional</div>
+    </div>
+    <div class="photo-guide" id="photo-guide"><strong style="color:var(--text);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">O que fotografar</strong><br><span id="photo-guide-text">🌿 Geral · 💧 Detalhe · 📏 Equipamento</span></div>
+    <div class="pgrid" id="photo-grid">
+      <div class="pthumb req" id="ph0" onclick="addPhoto(0)"><span style="font-size:20px">📷</span><span class="pt-label-sm">Geral *</span><span class="photo-ts">09:14</span></div>
+      <div class="pthumb req" id="ph1" onclick="addPhoto(1)"><span style="font-size:20px">📷</span><span class="pt-label-sm">Detalhe *</span><span class="photo-ts">09:14</span></div>
+      <div class="pthumb req" id="ph2" onclick="addPhoto(2)"><span style="font-size:20px">📷</span><span class="pt-label-sm">Equip. *</span><span class="photo-ts">09:14</span></div>
+      <div class="pthumb" id="ph3" onclick="addPhoto(3)"><span style="font-size:20px">📷</span><span class="pt-label-sm">+</span></div>
+      <div class="pthumb" id="ph4" onclick="addPhoto(4)"><span style="font-size:20px">📷</span><span class="pt-label-sm">+</span></div>
+      <div class="pthumb" id="ph5" onclick="addPhoto(5)"><span style="font-size:20px">📷</span><span class="pt-label-sm">+</span></div>
+    </div>
+
+    <div class="fl-label" style="margin-bottom:8px">Observações</div>
+    <div class="obs-section"><div class="obs-section-label">Visual</div><div class="obs-tags"><div class="obs-tag" onclick="this.classList.toggle('on')">🔵 Água clara</div><div class="obs-tag" onclick="this.classList.toggle('on')">💧 Água turva</div><div class="obs-tag" onclick="this.classList.toggle('on')">🟤 Coloração</div><div class="obs-tag" onclick="this.classList.toggle('on')">🟢 Algas</div></div></div>
+    <div class="obs-section"><div class="obs-section-label">Odor</div><div class="obs-tags"><div class="obs-tag" onclick="this.classList.toggle('on')">✅ Sem odor</div><div class="obs-tag" onclick="this.classList.toggle('on')">⚠ Odor forte</div><div class="obs-tag" onclick="this.classList.toggle('on')">🪣 Esgoto</div></div></div>
+    <div class="obs-section"><div class="obs-section-label">Interferência</div><div class="obs-tags"><div class="obs-tag" onclick="this.classList.toggle('on')">🟡 Óleo</div><div class="obs-tag" onclick="this.classList.toggle('on')">🌿 Vegetação</div><div class="obs-tag" onclick="this.classList.toggle('on')">💨 Vazão alta</div><div class="obs-tag" onclick="this.classList.toggle('on')">🏗 Obras</div></div></div>
+    <div class="fl"><label class="fl-label">Descrição livre</label><textarea class="fi" rows="3" id="obs-text" placeholder="Aspecto, vazão, interferências…"></textarea></div>
+
+    <button class="btn prim" id="btn-save" onclick="markDone()" style="margin-bottom:8px">✅ Salvar e próximo ponto</button>
+    <button class="btn danger" onclick="openModal('m-nc')">⚠ Coleta não realizada</button>
+    <div class="gap"></div>
+  </div>
+</div>
+
+<!-- ═══ NOT COLLECTED ═══ -->
+<div class="screen" id="s-nc">
+  <div class="fbar">
+    <div class="back" onclick="go('s-collect-point')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t">Coleta não realizada</div><div class="fbar-s" id="nc-sub">Justificativa obrigatória</div></div>
+  </div>
+  <div class="fbody">
+    <div style="background:var(--warn-dim);border:1px solid rgba(251,191,36,.25);border-radius:14px;padding:14px;margin-bottom:16px"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--warn);margin-bottom:4px">⚠ Justificativa obrigatória</div><div style="font-size:11px;color:var(--sub);line-height:1.5">O ponto permanece na base com código original. Informe o motivo e status atual.</div></div>
+    <div class="fl-label" style="margin-bottom:10px">Motivo</div>
+    <div class="nc-reasons">
+      <div class="nc-reason" onclick="selNC(this)"><div class="nc-reason-icon">🚧</div>Sem acesso</div>
+      <div class="nc-reason" onclick="selNC(this)"><div class="nc-reason-icon">🏜</div>Ponto seco</div>
+      <div class="nc-reason" onclick="selNC(this)"><div class="nc-reason-icon">🔧</div>Equip. danificado</div>
+      <div class="nc-reason" onclick="selNC(this)"><div class="nc-reason-icon">⛈</div>Clima adverso</div>
+      <div class="nc-reason" onclick="selNC(this)" style="grid-column:1/-1"><div class="nc-reason-icon">❓</div>Ponto não localizado</div>
+    </div>
+    <div class="fl"><label class="fl-label">Novo status do ponto</label><select class="fi"><option>⚠ Não localizado</option><option>🏜 Seco — sem água</option><option>🔧 Danificado</option><option>⏸ Temporariamente inativo</option><option>✅ OK — motivo externo</option></select></div>
+    <div class="fl"><label class="fl-label">Descrição</label><textarea class="fi" rows="3" placeholder="Detalhe o motivo para justificativa técnica…"></textarea></div>
+    <div class="fl-label">Foto de evidência</div>
+    <div class="pgrid" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
+      <div class="pthumb req" onclick="this.innerHTML='<span style=font-size:28px>🖼</span><span class=photo-ts style=display:block>09:20</span>';this.classList.add('filled')"><span style="font-size:20px">📷</span><span class="pt-label-sm">Evidência *</span></div>
+      <div class="pthumb" onclick="this.innerHTML='<span style=font-size:28px>🖼</span>';this.classList.add('filled')"><span style="font-size:20px">📷</span><span class="pt-label-sm">+</span></div>
+      <div class="pthumb" onclick="this.innerHTML='<span style=font-size:28px>🖼</span>';this.classList.add('filled')"><span style="font-size:20px">📷</span><span class="pt-label-sm">+</span></div>
+    </div>
+    <div class="gps-block" style="margin-bottom:14px">
+      <div class="gps-top"><span class="gps-title">GPS da tentativa</span><span class="gps-status wait" id="nc-gps-s">Aguardando</span></div>
+      <div class="gps-capture-btn" onclick="captureGPS('nc');document.getElementById('nc-gps-s').textContent='Capturado';document.getElementById('nc-gps-s').className='gps-status ok'">📍 Capturar</div>
+    </div>
+    <button class="btn warn" onclick="markNC()" style="margin-bottom:8px">Registrar e avançar →</button>
+    <button class="btn sec" onclick="go('s-collect-point')">Voltar — tentar coleta</button>
+    <div class="gap"></div>
+  </div>
+</div>
+
+<!-- ═══ FINISH ═══ -->
+<div class="screen" id="s-finish">
+  <div class="fbar">
+    <div class="back" onclick="go('s-os')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t">Encerrar campo</div><div class="fbar-s">Resumo da campanha</div></div>
+  </div>
+  <div class="fbody">
+    <div style="background:linear-gradient(135deg,var(--forest),var(--graphite));border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,178,.08) 0%,transparent 70%)"></div>
+      <div style="font-size:36px;margin-bottom:10px">✅</div>
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text)">Campo concluído</div>
+      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--sub);margin-top:6px" id="fin-subtitle">Campanha · 21/03/2026</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px;margin-bottom:16px">
+      <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:12px">Resumo</div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Pontos coletados</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text);font-weight:700" id="fin-collected">—</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Não coletados</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--warn);font-weight:700" id="fin-nc">—</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Fotos registradas</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--neon);font-weight:700">18 fotos</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:12px;color:var(--sub)">Responsável</span><span style="font-size:12px;color:var(--text);font-weight:600">Carlos Almeida 🔐</span></div>
+    </div>
+    <div class="fl"><label class="fl-label">Hora encerramento</label><input class="fi" type="time" value="16:30"></div>
+    <div class="fl"><label class="fl-label">Observações finais</label><textarea class="fi" rows="3" placeholder="Intercorrências, próximos passos…"></textarea></div>
+    <button class="btn prim" onclick="openModal('m-finish')" style="margin-bottom:8px">Finalizar e enviar dados</button>
+    <button class="btn sec" onclick="go('s-os')">Revisar pontos</button>
+    <div class="gap"></div>
+  </div>
+</div>
+
+<!-- ═══ REPORTS ═══ -->
+<div class="screen" id="s-reports">
+  <div class="tbar">
+    <div><div class="logo"><span class="logo-e">Enviro</span><span class="logo-t">Track</span></div><div class="logo-sub">Relatórios</div></div>
+    <div class="chip" onclick="go('s-notif')"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="badge-num">2</div></div>
+  </div>
+
+  <div style="margin:0 24px 16px;background:var(--warn-dim);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+    <span>🟡</span><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--warn)">3 coletas pendentes</div><div style="font-size:11px;color:var(--sub);margin-top:1px">Download disponível ao sincronizar</div></div>
+    <div onclick="showToast('☁ Sincronizando…')" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--acc);background:var(--acc-dim);padding:4px 10px;border-radius:20px;cursor:pointer">Sync</div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="rep-filter-card">
+    <div class="rep-filter-title">Filtros de busca</div>
+    <div style="margin-bottom:12px">
+      <div class="rep-filter-sub">📅 Período</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sub2);margin-bottom:4px">DE</div><input type="month" value="2026-01" id="rep-from" class="fi" style="font-size:12px;padding:9px 12px"></div>
+        <div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sub2);margin-bottom:4px">ATÉ</div><input type="month" value="2026-03" id="rep-to" class="fi" style="font-size:12px;padding:9px 12px"></div>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div class="rep-filter-sub">📁 Campanha</div>
+      <select class="fi" id="rep-camp" style="font-size:13px;padding:9px 12px">
+        <option value="">Todas as campanhas</option>
+        <option value="vale">CAM-2026-03 · Vale Carajás</option>
+        <option value="cubatao">CAM-2026-03 · Cubatão S.A.</option>
+        <option value="paulinia">CAM-2026-03 · Paulínia S.A.</option>
+      </select>
+    </div>
+    <div style="margin-bottom:12px">
+      <div class="rep-filter-sub">📍 Tipo de ponto</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <div class="filter-chip on" onclick="this.classList.toggle('on')">🌱 Nascente</div>
+        <div class="filter-chip on" onclick="this.classList.toggle('on')">🌊 Vertedouro</div>
+        <div class="filter-chip on" onclick="this.classList.toggle('on')">🌊 Drenagem</div>
+        <div class="filter-chip on" onclick="this.classList.toggle('on')">📏 Piezômetro</div>
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="rep-filter-sub" style="margin:0">Pontos específicos</div>
+        <div onclick="repSelectAll()" style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--acc);cursor:pointer;letter-spacing:.3px">Selecionar todos</div>
+      </div>
+      <div id="rep-point-chips" style="display:flex;flex-wrap:wrap;gap:5px;max-height:70px;overflow:hidden"></div>
+    </div>
+    <button class="btn prim" onclick="generateReport()">🔍 Gerar lista de coletas</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="rep-results-block" style="display:none">
+    <div style="padding:0 24px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text)" id="rep-count-label">—</div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub);margin-top:1px" id="rep-filter-summary">—</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <div onclick="showToast('📄 PDF gerado!')" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:6px 10px;border-radius:10px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line);cursor:pointer">📄 PDF</div>
+        <div onclick="showToast('📊 Excel exportado!')" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:6px 10px;border-radius:10px;background:var(--sky-dim);color:var(--sky);border:1px solid rgba(14,165,233,.2);cursor:pointer">📊 Excel</div>
+      </div>
+    </div>
+    <div id="rep-results-list" style="padding:0 24px;display:flex;flex-direction:column;gap:8px;margin-bottom:20px"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div style="height:1px;background:var(--line2);margin:0 24px 18px"></div>
+  <div class="section-head">Histórico de relatórios</div>
+  <div style="padding:0 24px;margin-bottom:20px">
+    <div class="hist-item" onclick="showToast('Abrindo relatório…')">
+      <div class="hist-icon" style="background:var(--acc-dim)">📄</div>
+      <div style="flex:1"><div class="hist-name">Vale Carajás · Mar/2026</div><div class="hist-meta">PDF · 18 pontos · Hoje 09:45</div></div>
+      <div class="hist-dl" style="background:var(--acc-dim);color:var(--acc)">↓</div>
+    </div>
+    <div class="hist-item" onclick="showToast('Abrindo relatório…')">
+      <div class="hist-icon" style="background:var(--sky-dim)">📊</div>
+      <div style="flex:1"><div class="hist-name">Cubatão Nascentes · Mar/2026</div><div class="hist-meta">Excel · 12 pontos · Hoje 08:30</div></div>
+      <div class="hist-dl" style="background:var(--sky-dim);color:var(--sky)">↓</div>
+    </div>
+    <div class="hist-item" onclick="showToast('Abrindo relatório…')">
+      <div class="hist-icon" style="background:var(--acc-dim)">📄</div>
+      <div style="flex:1"><div class="hist-name">Paulínia Drenagens · Fev/2026</div><div class="hist-meta">PDF · 9 pontos · 18/02/2026</div></div>
+      <div class="hist-dl" style="background:var(--acc-dim);color:var(--acc)">↓</div>
+    </div>
+    <div class="hist-item" onclick="showToast('Abrindo relatório…')" style="opacity:.5">
+      <div class="hist-icon" style="background:var(--raised)">📄</div>
+      <div style="flex:1"><div class="hist-name">Vale Carajás · Jan/2026</div><div class="hist-meta">PDF · 18 pontos · 15/01/2026</div></div>
+      <div class="hist-dl" style="background:var(--raised);color:var(--sub)">↓</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REP DETAIL ═══ -->
+<div class="screen" id="s-rep-detail">
+  <div class="fbar">
+    <div class="back" onclick="go('s-reports');nav('n-reports')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div><div class="fbar-t" id="repd-title">NAS-001</div><div class="fbar-s" id="repd-sub">Coleta · Mar/2026</div></div>
+  </div>
+  <div class="fbody">
+    <div class="btn-row" style="margin-bottom:16px">
+      <button class="btn prim" onclick="showToast('📄 PDF deste ponto gerado!')" style="padding:12px;font-size:13px">📄 Gerar PDF</button>
+      <button class="btn sec" onclick="showToast('📊 Excel exportado!')" style="padding:12px;font-size:13px">📊 Excel</button>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:16px;margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:12px">Identificação</div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Código</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--acc);font-weight:700" id="repd-code">NAS-001</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Tipo</span><span style="font-size:12px;color:var(--text);font-weight:500" id="repd-type">Nascente</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Campanha</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text)" id="repd-camp">CAM-2026-03</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Data coleta</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text)" id="repd-date">21/03/2026</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-size:12px;color:var(--sub)">Responsável</span><span style="font-size:12px;color:var(--text);font-weight:500">Carlos Almeida</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:12px;color:var(--sub)">Coordenadas</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text)" id="repd-coords">-6.0012, -50.1468</span></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:16px;margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:12px">Parâmetros</div>
+      <div id="repd-params"></div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:10px">Fotos (3)</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <div style="aspect-ratio:1;border-radius:12px;background:var(--acc-dim);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative"><span>🌿</span><div style="position:absolute;bottom:3px;left:3px;background:rgba(0,0,0,.65);border-radius:4px;padding:2px 5px;font-family:'Space Mono',monospace;font-size:7px;color:var(--neon)">09:14</div></div>
+        <div style="aspect-ratio:1;border-radius:12px;background:var(--sky-dim);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative"><span>💧</span><div style="position:absolute;bottom:3px;left:3px;background:rgba(0,0,0,.65);border-radius:4px;padding:2px 5px;font-family:'Space Mono',monospace;font-size:7px;color:var(--neon)">09:16</div></div>
+        <div style="aspect-ratio:1;border-radius:12px;background:var(--raised);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative"><span>📏</span><div style="position:absolute;bottom:3px;left:3px;background:rgba(0,0,0,.65);border-radius:4px;padding:2px 5px;font-family:'Space Mono',monospace;font-size:7px;color:var(--neon)">09:18</div></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:16px;margin-bottom:20px">
+      <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:10px">Observações</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+        <div style="font-size:11px;padding:3px 10px;border-radius:20px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line)">🔵 Água clara</div>
+        <div style="font-size:11px;padding:3px 10px;border-radius:20px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line)">✅ Sem odor</div>
+      </div>
+      <div style="font-size:12px;color:var(--sub);line-height:1.6">Afloramento em boas condições. Vazão visualmente estável. Entorno preservado.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CALENDAR ═══ -->
+<div class="screen" id="s-calendar">
+  <div class="tbar">
+    <div><div class="logo"><span class="logo-e">Enviro</span><span class="logo-t">Track</span></div><div class="logo-sub">Agenda</div></div>
+    <div class="chip" onclick="go('s-notif')"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="badge-num">2</div></div>
+  </div>
+  <div style="padding:0 24px 14px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text)" id="cal-month-label"></div>
+      <div style="display:flex;gap:6px">
+        <div style="width:30px;height:30px;border-radius:10px;background:var(--surface);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--sub)" id="cal-prev" onclick="prevMonth()">‹</div>
+        <div style="width:30px;height:30px;border-radius:10px;background:var(--surface);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--sub)" id="cal-next" onclick="nextMonth()">›</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px;text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px">D</div><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px">S</div><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px">T</div><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px">Q</div><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px">Q</div><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px">S</div><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1px">S</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+  <div style="height:1px;background:var(--line2);margin:0 24px 16px"></div>
+  <div class="section-head" id="cal-day-label">Campanhas — 21 mar</div>
+  <div id="cal-events"></div>
+  <div style="height:1px;background:var(--line2);margin:4px 24px 16px" id="cal-up-div"></div>
+  <div class="section-head" id="cal-up-label" style="display:none"></div>
+  <div id="cal-upcoming"></div>
+</div>
+
+<!-- ═══ NOTIFICATIONS ═══ -->
+<div class="screen" id="s-notif">
+  <div class="fbar"><div class="back" onclick="go('s-home');nav('n-home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div><div><div class="fbar-t">Notificações</div><div class="fbar-s">2 não lidas</div></div></div>
+  <div style="padding:0 24px">
+    <div style="display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line2);cursor:pointer" onclick="openCampaign('vale');go('s-os');nav('n-collect')">
+      <div style="width:7px;height:7px;border-radius:50%;background:var(--neon);flex-shrink:0;margin-top:4px" class="neon-dot"></div>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--text)">📋 Nova campanha atribuída por Ana Lima</div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub);background:var(--raised);border-radius:8px;padding:6px 8px;margin:6px 0 2px;line-height:1.5">VALE CARAJÁS · CAM-2026-03 · 18 PONTOS</div>
+        <div style="font-size:11px;color:var(--sub)">Há 12 min · Toque para abrir</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line2)"><div style="width:7px;height:7px;border-radius:50%;background:var(--neon);flex-shrink:0;margin-top:4px" class="neon-dot"></div><div><div style="font-size:13px;font-weight:500;color:var(--text)">☁ 4 coletas sincronizadas</div><div style="font-size:11px;color:var(--sub);margin-top:2px">Há 2h</div></div></div>
+    <div style="display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line2)"><div style="width:7px;height:7px;border-radius:50%;background:var(--sub2);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:13px;color:var(--sub)">⚠ NAS-008 pH 5.9 — fora do padrão</div><div style="font-size:11px;color:var(--sub2);margin-top:2px">Há 3h · Automático</div></div></div>
+    <div style="display:flex;gap:12px;padding:14px 0"><div style="width:7px;height:7px;border-radius:50%;background:var(--sub2);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:13px;color:var(--sub)">🔑 Login efetuado</div><div style="font-size:11px;color:var(--sub2);margin-top:2px">Hoje, 08:15</div></div></div>
+  </div>
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div class="screen" id="s-profile">
+  <div class="fbar"><div class="back" onclick="go('s-home');nav('n-home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div><div><div class="fbar-t">Minha conta</div></div></div>
+  <div style="padding:60px 24px 24px;display:flex;flex-direction:column;align-items:center">
+    <div class="ph-av">CA</div>
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text)">Carlos Almeida</div>
+    <div style="font-size:12px;color:var(--sub);margin-top:3px">Técnico Ambiental · CRBio 12.345</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-family:'Space Mono',monospace;font-size:11px;color:var(--neon)"><div style="width:6px;height:6px;border-radius:50%;background:var(--neon)" class="neon-dot"></div>ONLINE · SYNC 09:38</div>
+  </div>
+  <div style="padding:0 24px">
+    <div style="display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line2)">
+      <span class="pitem-icon" id="theme-icon">🌙</span>
+      <span class="pitem-label" id="theme-lbl" style="font-size:14px;color:var(--text);flex:1">Modo escuro</span>
+      <div class="tg" onclick="toggleTheme()"><div class="tg-k" id="tg-k">🌙</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line2)">
+      <span class="pitem-icon">📴</span><span class="pitem-label" style="font-size:14px;color:var(--text);flex:1">Modo offline</span>
+      <div class="tg"><div class="tg-k" id="tg-offline-k">☁</div></div>
+    </div>
+    <div class="pitem"><span class="pitem-icon">👤</span><span class="pitem-label">Dados pessoais</span><span class="pitem-arr">›</span></div>
+    <div class="pitem"><span class="pitem-icon">📐</span><span class="pitem-label">Unidades de medida</span><span class="pitem-val">SI</span><span class="pitem-arr" style="margin-left:6px">›</span></div>
+    <div class="pitem"><span class="pitem-icon">☁</span><span class="pitem-label">Sincronização manual</span><span class="pitem-val" style="color:var(--warn)">3 pend.</span><span class="pitem-arr" style="margin-left:6px">›</span></div>
+    <div class="pitem"><span class="pitem-icon">📋</span><span class="pitem-label">Minhas campanhas</span><span class="pitem-arr">›</span></div>
+    <div class="pitem" style="border-bottom:none"><span class="pitem-icon">🚪</span><span class="pitem-label" style="color:var(--danger)">Sair da conta</span></div>
+  </div>
+  <div class="divider" style="margin-top:8px"></div>
+  <div class="section-head">Log de auditoria</div>
+  <div style="padding:0 24px">
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2)"><span style="font-family:'Space Mono',monospace;font-size:12px">✏</span><div style="flex:1;font-size:12px;color:var(--text)">NAS-003 editado · Vale Carajás</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sub)">09:34</div></div>
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2)"><span style="font-family:'Space Mono',monospace;font-size:12px">📍</span><div style="flex:1;font-size:12px;color:var(--text)">GPS: -6.0012, -50.1468 · ±3m</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sub)">09:18</div></div>
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2)"><span style="font-family:'Space Mono',monospace;font-size:12px">☁</span><div style="flex:1;font-size:12px;color:var(--text)">4 registros sincronizados</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sub)">08:52</div></div>
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0"><span style="font-family:'Space Mono',monospace;font-size:12px">🔑</span><div style="flex:1;font-size:12px;color:var(--text)">Login · Carlos Almeida</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sub)">08:15</div></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="overlay" id="m-nc" onclick="closeOnBg(event,'m-nc')">
+  <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">Coleta não realizada</div><div class="sheet-sub">O ponto permanece na base com código original. Registre o motivo.</div>
+    <div class="sopts">
+      <div class="sopt warn" onclick="closeModal('m-nc');go('s-nc')"><span class="sopt-icon">⚠</span><div class="sopt-body"><div class="sopt-name">Registrar justificativa</div><div class="sopt-desc">Foto + motivo obrigatórios</div></div><span class="sopt-arr">›</span></div>
+      <div class="sopt" onclick="closeModal('m-nc')"><span class="sopt-icon">↩</span><div class="sopt-body"><div class="sopt-name">Voltar e tentar novamente</div></div><span class="sopt-arr">›</span></div>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="m-next" onclick="closeOnBg(event,'m-next')">
+  <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title" id="m-next-title">Ponto salvo ✓</div><div class="sheet-sub" id="m-next-sub">O que deseja fazer?</div><div class="sopts" id="m-next-opts"></div></div>
+</div>
+<div class="overlay" id="m-finish" onclick="closeOnBg(event,'m-finish')">
+  <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">Enviar dados</div><div class="sheet-sub">Escolha como encaminhar a campanha.</div>
+    <div class="sopts">
+      <div class="sopt hi" onclick="closeModal('m-finish');go('s-home');nav('n-home')"><span class="sopt-icon">📄</span><div class="sopt-body"><div class="sopt-name">Gerar relatório PDF</div><div class="sopt-desc">Com fotos e parâmetros</div></div><span class="sopt-arr">›</span></div>
+      <div class="sopt" onclick="closeModal('m-finish');go('s-home');nav('n-home')"><span class="sopt-icon">☁</span><div class="sopt-body"><div class="sopt-name">Enviar à plataforma</div><div class="sopt-desc">Analista recebe para revisão</div></div><span class="sopt-arr">›</span></div>
+      <div class="sopt" onclick="closeModal('m-finish')"><span class="sopt-icon">💾</span><div class="sopt-body"><div class="sopt-name">Salvar localmente</div><div class="sopt-desc">Sincronizar depois</div></div><span class="sopt-arr">›</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <div class="ni on" id="n-home" onclick="go('s-home');nav('n-home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="ni-label">Início</span></div>
+  <div class="ni" id="n-collect" onclick="go('s-campaigns');nav('n-collect')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span class="ni-label">Coletar</span></div>
+  <div class="ni" id="n-reports" onclick="go('s-reports');nav('n-reports')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg><span class="ni-label">Relatórios</span></div>
+  <div class="ni" id="n-cal" onclick="go('s-calendar');nav('n-cal')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="ni-label">Agenda</span></div>
+  <div class="ni" id="n-prof" onclick="go('s-profile');nav('n-prof')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="ni-label">Perfil</span></div>
+</div>
+</div>
+
+<script>
+// ═══ DATA ═══
+const POINTS_DB=[
+  {code:'NAS-001',name:'Afloramento N-01',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Dez/2023',desc:'Afloramento em encosta de floresta ombrófila, cota 280m.',coords:[-6.0012,-50.1468],prevVals:{pH:6.8,temp:26.4,ce:45,od:9.2,orp:218,turb:1.2,vazao:1.8}},
+  {code:'NAS-002',name:'Afloramento N-02',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Dez/2023',desc:"Olho d'água em vale protegido, APP 100m.",coords:[-6.0029,-50.1455],prevVals:{pH:6.9,temp:27.1,ce:52,od:8.8,orp:205,turb:2.1,vazao:0.9}},
+  {code:'NAS-003',name:'Cabeceira Igarapé Cristal',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Dez/2023',desc:'Cabeceira do igarapé Cristal, floresta primária.',coords:[-6.0048,-50.1441],prevVals:{pH:7.0,temp:25.8,ce:38,od:9.5,orp:231,turb:0.8,vazao:2.4}},
+  {code:'NAS-004',name:'Afloramento N-04',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Mar/2024',desc:'Afloramento na borda da área de supressão.',coords:[-6.0063,-50.1428],prevVals:{pH:6.7,temp:27.5,ce:61,od:8.4,orp:198,turb:3.4,vazao:0.5}},
+  {code:'NAS-005',name:'Vertente Sul N-05',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Mar/2024',desc:'Vertente sul, recarga de aquífero fraturado.',coords:[-6.0077,-50.1414],prevVals:{pH:7.1,temp:26.0,ce:44,od:9.0,orp:225,turb:1.5,vazao:1.2}},
+  {code:'NAS-006',name:'Igarapé Sereno N-06',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Mar/2024',desc:'Borda de mata ciliar, igarapé Sereno.',coords:[-6.0091,-50.1401],prevVals:{pH:6.8,temp:26.8,ce:49,od:8.7,orp:212,turb:1.9,vazao:3.1}},
+  {code:'NAS-007',name:'Controle N-07',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Jun/2024',desc:'Afloramento periférico área de controle.',coords:[-6.0089,-50.1443],prevVals:{pH:7.2,temp:25.5,ce:40,od:9.3,orp:228,turb:1.1,vazao:0.7}},
+  {code:'NAS-008',name:'Revegetação N-08',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Jun/2024',desc:'Nascente em área de revegetação.',coords:[-6.0101,-50.1430],prevVals:{pH:6.6,temp:28.2,ce:72,od:7.9,orp:187,turb:5.8,vazao:0.3}},
+  {code:'NAS-009',name:'Jusante N-09',project:'Vale Carajás',type:'nasc',status:'ativo',firstCamp:'Jun/2024',desc:'Afloramento a jusante, referência de controle.',coords:[-6.0138,-50.1391],prevVals:{pH:7.0,temp:26.3,ce:47,od:9.1,orp:219,turb:1.6,vazao:1.5}},
+  {code:'VRT-001',name:'Vertedouro Barragem Leste',project:'Vale Carajás',type:'vert',status:'ativo',firstCamp:'Dez/2023',desc:'Dreno principal barragem leste.',coords:[-6.0021,-50.1487],prevVals:{vazao:24.8,nivel:1.12,turb:42.5}},
+  {code:'VRT-002',name:'SUMP Setor Norte',project:'Vale Carajás',type:'vert',status:'ativo',firstCamp:'Dez/2023',desc:'SUMP drenagem pluvial setor norte.',coords:[-6.0038,-50.1502],prevVals:{vazao:8.3,nivel:0.55,turb:28.1}},
+  {code:'VRT-003',name:'Dreno Emergência Oeste',project:'Vale Carajás',type:'vert',status:'inativo',firstCamp:'Mar/2024',desc:'Dreno emergência barragem oeste.',coords:[-6.0055,-50.1519],prevVals:{vazao:5.1,nivel:0.33,turb:18.7}},
+  {code:'VRT-004',name:'Canaleta Perimetral Norte',project:'Vale Carajás',type:'vert',status:'ativo',firstCamp:'Jun/2024',desc:'Dreno da canaleta perimetral norte.',coords:[-6.0114,-50.1417],prevVals:{vazao:3.7,nivel:0.22,turb:14.3}},
+  {code:'PZ-001',name:'Piezômetro P-01',project:'Vale Carajás',type:'inst',status:'ativo',firstCamp:'Dez/2023',desc:'Nível freático, área de influência barragem.',coords:[-6.0033,-50.1495],prevVals:{nivel:4.82,prof:12.0,status:'ativo',pH:6.9,temp:25.1,ce:38,od:9.0,orp:210,turb:0.5}},
+  {code:'PZ-002',name:'Piezômetro P-02',project:'Vale Carajás',type:'inst',status:'ativo',firstCamp:'Dez/2023',desc:'Monitoramento nível zona saturada.',coords:[-6.0047,-50.1482],prevVals:{nivel:3.21,prof:10.5,status:'ativo',pH:7.0,temp:25.4,ce:41,od:8.8,orp:215,turb:0.6}},
+  {code:'PZ-003',name:'Piezômetro P-03',project:'Vale Carajás',type:'inst',status:'ativo',firstCamp:'Mar/2024',desc:'Área de recarga, zona de expansão.',coords:[-6.0061,-50.1469],prevVals:{nivel:5.44,prof:15.0,status:'ativo',pH:6.8,temp:25.8,ce:44,od:8.5,orp:205,turb:0.8}},
+  {code:'PZ-004',name:'Piezômetro P-04',project:'Vale Carajás',type:'inst',status:'seco',firstCamp:'Mar/2024',desc:'Nível freático zona sudeste da cava.',coords:[-6.0075,-50.1456],prevVals:{nivel:0,prof:8.0,status:'seco',pH:null,temp:null,ce:null,od:null,orp:null,turb:null}},
+  {code:'PZ-005',name:'Piezômetro P-05',project:'Vale Carajás',type:'inst',status:'ativo',firstCamp:'Jun/2024',desc:'Instrumento na crista da barragem.',coords:[-6.0126,-50.1404],prevVals:{nivel:1.05,prof:6.0,status:'ativo',pH:7.1,temp:24.9,ce:36,od:9.2,orp:218,turb:0.4}},
+  {code:'NAS-010',name:'CB-01 Encosta Atlântica',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Jan/2025',desc:'Afloramento em encosta atlântica, cota 180m.',coords:[-23.8821,-46.4255],prevVals:{pH:6.4,temp:22.1,ce:28,od:9.8,orp:245,turb:0.6,vazao:0.4}},
+  {code:'NAS-011',name:'CB-02 Regeneração',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Jan/2025',desc:'Cabeceira em área de regeneração natural.',coords:[-23.8839,-46.4271],prevVals:{pH:6.5,temp:21.8,ce:32,od:9.5,orp:238,turb:0.9,vazao:0.6}},
+  {code:'NAS-012',name:'CB-03 Floresta Ombrófila',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Jan/2025',desc:"Olho d'água em floresta ombrófila densa.",coords:[-23.8857,-46.4287],prevVals:{pH:6.3,temp:22.5,ce:25,od:10.1,orp:251,turb:0.5,vazao:0.8}},
+  {code:'NAS-013',name:'CB-04 Brejo',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Jan/2025',desc:'Afloramento difuso em área de brejo.',coords:[-23.8875,-46.4303],prevVals:{pH:6.8,temp:23.2,ce:58,od:8.2,orp:196,turb:4.2,vazao:0.2}},
+  {code:'NAS-014',name:'CB-05 Vale Suspenso',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Jun/2025',desc:'Nascente puntiforme em vale suspenso.',coords:[-23.8891,-46.4319],prevVals:{pH:6.6,temp:22.0,ce:31,od:9.6,orp:241,turb:0.7,vazao:0.5}},
+  {code:'NAS-015',name:'CB-06 Rocha APP',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Jun/2025',desc:'Afloramento em rocha, APP.',coords:[-23.8907,-46.4335],prevVals:{pH:6.5,temp:21.5,ce:27,od:9.9,orp:248,turb:0.6,vazao:1.1}},
+  {code:'NAS-016',name:'CB-07 Mata Atlântica',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Jun/2025',desc:'Borda de encosta, Mata Atlântica.',coords:[-23.8921,-46.4351],prevVals:{pH:6.4,temp:22.3,ce:29,od:9.7,orp:244,turb:0.8,vazao:0.7}},
+  {code:'NAS-017',name:'CB-08 Recuperação',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Set/2025',desc:'Nascente em área pós-impacto industrial.',coords:[-23.8938,-46.4367],prevVals:{pH:5.9,temp:24.1,ce:88,od:7.1,orp:172,turb:8.5,vazao:0.1}},
+  {code:'NAS-018',name:'CB-09 Campo Úmido',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Set/2025',desc:'Afloramento em campo úmido de altitude.',coords:[-23.8954,-46.4383],prevVals:{pH:6.7,temp:20.8,ce:33,od:10.2,orp:255,turb:0.5,vazao:1.4}},
+  {code:'NAS-019',name:'CB-10 Perequê',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Set/2025',desc:'Cabeceira da bacia do Rio Perequê.',coords:[-23.8971,-46.4399],prevVals:{pH:6.3,temp:21.9,ce:26,od:9.9,orp:249,turb:0.7,vazao:2.2}},
+  {code:'NAS-020',name:'CB-11 Quartzito',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Dez/2025',desc:'Afloramento rochoso em quartzito.',coords:[-23.8987,-46.4415],prevVals:{pH:6.1,temp:22.8,ce:22,od:10.3,orp:258,turb:0.4,vazao:0.3}},
+  {code:'NAS-021',name:'CB-12 Transição',project:'Cubatão S.A.',type:'nasc',status:'ativo',firstCamp:'Dez/2025',desc:'Zona de transição, cota mais baixa.',coords:[-23.9003,-46.4431],prevVals:{pH:6.9,temp:23.5,ce:61,od:8.5,orp:201,turb:3.8,vazao:0.9}},
+  {code:'DRN-001',name:'Canal Principal Norte',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Mar/2024',desc:'Canal principal de drenagem pluvial, setor industrial norte.',coords:[-22.7601,-47.1522],prevVals:{vazao:38.4,nivel:0.72,turb:65.2}},
+  {code:'DRN-002',name:'Dreno Perimetral Leste',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Mar/2024',desc:'Dreno perimetral leste, efluente tratado.',coords:[-22.7618,-47.1538],prevVals:{vazao:12.1,nivel:0.38,turb:22.8}},
+  {code:'DRN-003',name:'Canaleta Armazenamento',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Jun/2024',desc:'Canaleta de águas pluviais.',coords:[-22.7635,-47.1554],prevVals:{vazao:5.8,nivel:0.21,turb:14.5}},
+  {code:'DRN-004',name:'Dreno Sul — Receptor',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Jun/2024',desc:'Dreno sul, conexão com corpo receptor.',coords:[-22.7652,-47.1570],prevVals:{vazao:22.7,nivel:0.55,turb:38.9}},
+  {code:'DRN-005',name:'Canal Desvio Emergencial',project:'Paulínia S.A.',type:'dren',status:'inativo',firstCamp:'Jun/2024',desc:'Canal de desvio, operação emergencial.',coords:[-22.7668,-47.1586],prevVals:{vazao:0,nivel:0,turb:0}},
+  {code:'DRN-006',name:'Caixa Passagem Central',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Set/2024',desc:'Caixa de passagem, interseção de drenos.',coords:[-22.7684,-47.1602],prevVals:{vazao:44.5,nivel:0.88,turb:71.3}},
+  {code:'DRN-007',name:'Saída Córrego Piçarrão',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Set/2024',desc:'Saída final para o Córrego Piçarrão.',coords:[-22.7701,-47.1618],prevVals:{vazao:98.2,nivel:1.34,turb:85.6}},
+  {code:'DRN-008',name:'Dreno Pátio de Tanques',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Dez/2024',desc:'Dreno interno pátio de tanques.',coords:[-22.7717,-47.1634],prevVals:{vazao:8.6,nivel:0.29,turb:18.1}},
+  {code:'DRN-009',name:'Controle Montante',project:'Paulínia S.A.',type:'dren',status:'ativo',firstCamp:'Dez/2024',desc:'Ponto de controle a montante.',coords:[-22.7734,-47.1650],prevVals:{vazao:15.3,nivel:0.44,turb:28.7}},
+];
+
+const CAMPAIGNS={
+  vale:{num:'#2.01.03.51042',campId:'CAM-2026-03',name:'Vale Carajás',campLabel:'Campanha Março 2026',client:'Vale S.A.',gerente:'Rafael Borges',prazo:'28/03/2026',cc:'CC-2024-VALE-PA',tipo:'Monitoramento · Físico-Químico · Instrumentos',tags:['Monitoramento','NAS · VRT · PZ','Vale S.A.'],pointCodes:['NAS-001','NAS-002','NAS-003','NAS-004','NAS-005','NAS-006','NAS-007','NAS-008','NAS-009','VRT-001','VRT-002','VRT-003','VRT-004','PZ-001','PZ-002','PZ-003','PZ-004','PZ-005']},
+  cubatao:{num:'#2.02.01.52180',campId:'CAM-2026-03',name:'Inventário Nascentes',campLabel:'Campanha Março 2026',client:'Cubatão S.A.',gerente:'Márcia Oliveira',prazo:'30/03/2026',cc:'CC-2024-CUBATAO-SP',tipo:'Inventário de Nascentes',tags:['Inventário','Nascentes','Cubatão S.A.'],pointCodes:['NAS-010','NAS-011','NAS-012','NAS-013','NAS-014','NAS-015','NAS-016','NAS-017','NAS-018','NAS-019','NAS-020','NAS-021']},
+  paulinia:{num:'#2.03.02.53391',campId:'CAM-2026-03',name:'Medição de Drenagens',campLabel:'Campanha Março 2026',client:'Paulínia S.A.',gerente:'Douglas Meira',prazo:'25/03/2026',cc:'CC-2024-PAULINIA-SP',tipo:'Monitoramento de Drenagens',tags:['Drenagens','Monitoramento','Paulínia S.A.'],pointCodes:['DRN-001','DRN-002','DRN-003','DRN-004','DRN-005','DRN-006','DRN-007','DRN-008','DRN-009']},
+};
+const TYPE_PARAMS={nasc:['pH','temp','ce','od','orp','turb','vazao'],vert:['vazao','nivel','turb'],dren:['vazao','nivel','turb'],inst:['nivel','prof','pH','temp','ce','od','orp','turb']};
+const PARAM_META={pH:{icon:'⚗',label:'pH',unit:'',min:6,max:9},temp:{icon:'🌡',label:'Temp',unit:'°C',min:10,max:35},ce:{icon:'⚡',label:'CE',unit:'µS/cm',min:0,max:1500},od:{icon:'🫧',label:'OD',unit:'mg/L',min:5,max:14},orp:{icon:'🔋',label:'ORP',unit:'mV',min:100,max:400},turb:{icon:'〰',label:'Turbidez',unit:'NTU',min:0,max:100},vazao:{icon:'💧',label:'Vazão',unit:'L/s',min:0,max:500},nivel:{icon:'📏',label:'Nível',unit:'m',min:0,max:20},prof:{icon:'📐',label:'Prof.',unit:'m',min:0,max:30}};
+const PHOTO_EMOJIS=['🌿','🌊','📷','🌱','💧','🏞'];
+const PHOTO_GUIDES={nasc:'🌿 Geral: entorno e contexto<br>💧 Detalhe: afloramento<br>📏 Equip.: sonda em uso',vert:'🌊 Geral: vertedouro e canal<br>💧 Detalhe: escoamento<br>📏 Equip.: calha Parshall',dren:'🌊 Geral: drenagem e entorno<br>💧 Detalhe: saída do dreno<br>📏 Equip.: medidor',inst:'📏 Geral: casing do piezômetro<br>🔽 Detalhe: nível d\'água<br>📷 Equip.: medidor em uso'};
+
+let currentCampKey='vale',POINTS=[],state={idx:0,status:[],photos:[],photoCount:0,skipped:false,lastVals:{}};
+let piezSkipped=false,paramsSkipped=false;
+
+// ═══ CAMPAIGN ═══
+function openCampaign(key){
+  currentCampKey=key;const c=CAMPAIGNS[key];
+  POINTS=c.pointCodes.map(code=>POINTS_DB.find(p=>p.code===code)).filter(Boolean);
+  state.status=new Array(POINTS.length).fill('pending');
+  document.getElementById('os-title').textContent=c.campLabel;
+  document.getElementById('os-sub').textContent=`${c.num} · ${c.campId}`;
+  document.getElementById('os-proj-num').textContent=`PROJETO · ${c.num.replace('#','')}`;
+  document.getElementById('os-proj-name').textContent=c.name;
+  document.getElementById('os-tags').innerHTML=c.tags.map((t,i)=>`<span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid;${i===0?'border-color:rgba(14,165,233,.25);color:var(--sky);background:var(--sky-dim)':'border-color:var(--line2);color:var(--sub)'}">${t}</span>`).join('');
+  document.getElementById('os-camp-label').textContent=c.campLabel;
+  document.getElementById('os-camp-sub').textContent=`${c.campId} · Evento periódico de monitoramento`;
+  document.getElementById('os-client').textContent=c.client;
+  document.getElementById('os-ger').textContent=c.gerente;
+  document.getElementById('os-prazo').textContent=c.prazo;
+  document.getElementById('os-cc').textContent=c.cc;
+  document.getElementById('os-total').textContent=`${POINTS.length} pontos`;
+  const tipos=[...new Set(POINTS.map(p=>p.type==='nasc'?'Nascentes':p.type==='vert'?'Vertedouros':p.type==='dren'?'Drenagens':'Piezômetros'))];
+  document.getElementById('os-tipos').textContent=tipos.join(' · ');
+  document.getElementById('st-proj').textContent=`${c.name} · ${c.campLabel}`;
+  document.getElementById('st-client').textContent=c.client;
+  document.getElementById('st-tipo').textContent=c.tipo;
+  renderOSPoints();go('s-os');nav('n-collect');
+}
+
+function renderOSPoints(){
+  const el=document.getElementById('points-list');let done=0,nc=0;
+  el.innerHTML=POINTS.map((p,i)=>{
+    const s=state.status[i];
+    if(s==='done') done++;if(s==='nc') nc++;
+    const numClass=s==='done'?'done':s==='nc'?'nc':'';
+    const cardClass=s==='nc'?'nc':s==='done'?'done':p.status!=='ativo'?'danger':'';
+    const badge=s==='done'?'<span class="pill pill-new" style="flex-shrink:0">Coletado</span>':s==='nc'?'<span class="pill pill-warn" style="flex-shrink:0">Não coletado</span>':'<span style="font-family:\'Space Mono\',monospace;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--raised);color:var(--sub);white-space:nowrap;flex-shrink:0;letter-spacing:.5px">PENDENTE</span>';
+    const typeIcon=p.type==='nasc'?'🌱':p.type==='vert'?'🌊':p.type==='dren'?'🌊':'📏';
+    const statusNote=p.status!=='ativo'?`<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--warn)"> · ${p.status.toUpperCase()}</span>`:'';
+    return `<div class="pt-card ${cardClass}" onclick="go('s-collect-point');setPoint(${i})">
+      <div class="pt-num ${numClass}">${i+1}</div>
+      <div class="pt-info">
+        <div class="pt-code">${p.code}${statusNote}</div>
+        <div class="pt-name">${typeIcon} ${p.name}</div>
+        <div class="pt-meta">${p.type==='nasc'?'Nascente':p.type==='vert'?'Vertedouro':p.type==='dren'?'Drenagem':'Piezômetro'} · ${p.firstCamp}</div>
+      </div>
+      ${badge}
+    </div>`;
+  }).join('');
+  document.getElementById('os-done-count').textContent=`${done+nc} / ${POINTS.length}`;
+  const btn=document.getElementById('btn-start-os');
+  if(done+nc===POINTS.length){btn.textContent='Encerrar campo →';btn.onclick=()=>{finishSummary();go('s-finish');};}
+  else{btn.textContent='Iniciar trabalho de campo';btn.onclick=()=>go('s-start-task');}
+}
+
+function renderPointSelectList(){
+  const el=document.getElementById('point-select-list');if(!el) return;
+  el.innerHTML=POINTS.map((p,i)=>{
+    const typeIcon=p.type==='nasc'?'🌱':p.type==='vert'?'🌊':p.type==='dren'?'🌊':'📏';
+    const typeClass=p.type==='nasc'?'nasc':p.type==='inst'?'inst':'dren';
+    const dist=(0.1+Math.random()*.8).toFixed(2);
+    const s=state.status[i];
+    const dotColor=s==='done'?'var(--acc)':s==='nc'?'var(--warn)':'var(--sub2)';
+    return `<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);cursor:pointer" onclick="go('s-collect-point');setPoint(${i})">
+      <div class="type-ico ${typeClass}">${typeIcon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:var(--acc);letter-spacing:1px">${p.code}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:1px">${p.project} · ${p.firstCamp}</div>
+      </div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub)">📍 ${dist}km</div>
+      <div style="width:7px;height:7px;border-radius:50%;background:${dotColor};flex-shrink:0"></div>
+    </div>`;
+  }).join('');
+}
+
+function renderDB(){
+  const el=document.getElementById('db-list');if(!el) return;
+  el.innerHTML=POINTS_DB.map((p,i)=>{
+    const typeIcon=p.type==='nasc'?'🌱':p.type==='vert'?'🌊':p.type==='dren'?'🌊':'📏';
+    const typeClass=p.type==='nasc'?'nasc':p.type==='inst'?'inst':'dren';
+    const sc=p.status==='ativo'?'var(--acc)':p.status==='seco'||p.status==='inativo'?'var(--warn)':'var(--danger)';
+    const sl=p.status==='ativo'?'ATIVO':p.status==='seco'?'SECO':p.status==='inativo'?'INATIVO':'DANIF.';
+    return `<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);cursor:pointer">
+      <div class="type-ico ${typeClass}">${typeIcon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:var(--acc);letter-spacing:1px">${p.code}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:1px">${p.project} · ${p.firstCamp}</div>
+      </div>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:${sc}1a;color:${sc};letter-spacing:.5px">${sl}</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══ SET POINT ═══
+function setPoint(idx){
+  state.idx=idx;state.photos=new Array(6).fill(false);state.photoCount=0;
+  state.skipped=false;piezSkipped=false;paramsSkipped=false;
+  const p=POINTS[idx];const total=POINTS.length;
+  const pct=Math.round((idx/total)*100);
+  document.getElementById('cp-title').textContent=p.name;
+  document.getElementById('cp-sub').textContent=`Ponto ${idx+1} / ${total}`;
+  document.getElementById('cp-prog-label').textContent=`Ponto ${idx+1} de ${total}`;
+  document.getElementById('cp-prog-pct').textContent=`${pct}%`;
+  document.getElementById('cp-prog-fill').style.width=`${pct}%`;
+  document.getElementById('cp-code').textContent=p.code;
+  document.getElementById('cp-name').textContent=p.name;
+  document.getElementById('cp-desc').textContent=p.desc;
+  document.getElementById('cp-first-camp').textContent=`PRIMEIRO CADASTRO: ${p.firstCamp}`;
+  document.getElementById('cp-time').textContent=`🕐 ${getTime()}`;
+  const dist=Math.round(10+Math.random()*180);
+  const distEl=document.getElementById('dist-badge');const distTxt=document.getElementById('dist-txt');
+  if(dist<50){distEl.style.background='var(--acc-dim)';distEl.style.color='var(--acc)';distTxt.textContent=`A ${dist}m ✓`;}
+  else if(dist<150){distEl.style.background='var(--warn-dim)';distEl.style.color='var(--warn)';distTxt.textContent=`A ${dist}m — verificar`;}
+  else{distEl.style.background='var(--danger-dim)';distEl.style.color='var(--danger)';distTxt.textContent=`⚠ A ${dist}m — GPS ruim`;}
+  const badge=document.getElementById('cp-type-badge');
+  if(p.type==='nasc'){badge.className='type-badge nasc';badge.textContent='🌱 Nascente';}
+  else if(p.type==='vert'){badge.className='type-badge vert';badge.textContent='🌊 Vertedouro';}
+  else if(p.type==='dren'){badge.className='type-badge dren';badge.textContent='🌊 Drenagem';}
+  else{badge.className='type-badge inst';badge.textContent='📏 Instrumento';}
+  document.getElementById('photo-guide-text').innerHTML=PHOTO_GUIDES[p.type]||PHOTO_GUIDES.nasc;
+  const instBlock=document.getElementById('inst-status-block');
+  if(p.type==='inst'){instBlock.style.display='block';document.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('on'));const so=document.querySelectorAll('.status-opt');const sm={ativo:0,inativo:1,danificado:2,destruido:3};if(so[sm[p.prevVals.status||'ativo']]) so[sm[p.prevVals.status||'ativo']].classList.add('on');}
+  else{instBlock.style.display='none';}
+  const grid=document.getElementById('param-grid');const banner=document.getElementById('skip-banner');const skipBtn=document.getElementById('skip-btn');
+  if(grid) grid.style.display='grid';if(banner) banner.style.display='none';
+  if(skipBtn){skipBtn.querySelector('#skip-icon').textContent='🚫';skipBtn.querySelector('#skip-label').textContent='Não monitorar';skipBtn.className='param-action skip';}
+  for(let i=0;i<6;i++){const el=document.getElementById('ph'+i);if(el){el.classList.remove('filled');el.className='pthumb'+(i<3?' req':'');el.innerHTML=`<span style="font-size:20px">📷</span><span class="pt-label-sm">${i<3?'Foto '+(i+1)+' *':'+'}</span><span class="photo-ts">${getTime()}</span>`;}}
+  document.getElementById('photo-count').textContent='0';
+  document.getElementById('pt-lat').textContent='—';document.getElementById('pt-lng').textContent='—';
+  document.getElementById('pt-acc-val').textContent='—';document.getElementById('pt-acc-dot').style.background='var(--sub2)';
+  document.getElementById('pt-gps-status').textContent='Aguardando';document.getElementById('pt-gps-status').className='gps-status wait';
+  document.getElementById('pt-gps-block').className='gps-block';document.getElementById('pt-gps-btn').textContent='📍 Capturar';document.getElementById('pt-gps-btn').className='gps-capture-btn';
+  document.getElementById('pt-map').textContent='🗺 Capturar GPS para visualizar';document.getElementById('pt-map').style.background='';
+  document.getElementById('anomaly-alert').style.display='none';document.getElementById('anomaly-alert').innerHTML='';
+  setCheck('gps',false,'Pendente');setCheck('params',false,'0 preenchidos');setCheck('photos',false,'0 / 3');
+  document.getElementById('nc-sub').textContent=`${p.code} · ${p.name}`;
+  renderParams(p);autoSave();
+}
+
+function renderParams(p){
+  const params=TYPE_PARAMS[p.type]||['pH','temp','ce','od','orp','turb'];
+  const grid=document.getElementById('param-grid');const title=document.getElementById('params-title');
+  if(p.type==='nasc') title.textContent='Físico-químicos + Vazão';
+  else if(p.type==='vert'||p.type==='dren') title.textContent='Parâmetros hidráulicos';
+  else title.textContent='Leituras do instrumento';
+  if(p.type==='inst'){
+    const instrKeys=['nivel','prof'];const fqKeys=['pH','temp','ce','od','orp','turb'];
+    grid.innerHTML=instrKeys.map(k=>pCard(k,p)).join('')+`
+      <div style="grid-column:1/-1;height:1px;background:var(--line2);margin:4px 0 2px"></div>
+      <div class="piez-section-header">
+        <span class="piez-section-title">Físico-químicos (opcional)</span>
+        <div id="piez-skip-btn" onclick="togglePiezSkip()" style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:4px 8px;border-radius:20px;background:var(--raised);color:var(--sub);border:1px solid var(--line2);cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:.3px">
+          <span id="piez-skip-icon">🚫</span><span id="piez-skip-label">Não monitorar</span>
+        </div>
+      </div>
+      <div id="piez-fq-grid" style="display:contents">${fqKeys.map(k=>pCard(k,p)).join('')}</div>
+      <div id="piez-fq-banner" style="display:none;grid-column:1/-1;background:var(--warn-dim);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:12px 14px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px">⚠</span><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--warn)">Físico-químicos não monitorados</div></div><div onclick="togglePiezSkip()" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--acc);cursor:pointer;padding:3px 8px;background:var(--acc-dim);border-radius:20px">Desfazer</div></div>
+        <textarea class="fi" rows="2" placeholder="Motivo: instrumento seco…" style="margin-top:10px;font-size:12px;padding:10px 12px"></textarea>
+      </div>`;
+  } else {
+    grid.innerHTML=params.map(k=>pCard(k,p)).join('');
+  }
+}
+
+function pCard(k,p){
+  const m=PARAM_META[k];if(!m) return '';
+  const prev=p.prevVals[k];const prevOk=prev!==null&&prev!==undefined;
+  return `<div class="pcard" id="pc-${k}"><div class="pc-dot" id="pd-${k}"></div>
+    <div class="pc-label">${m.icon} ${m.label}</div>
+    <input class="pc-in" type="number" placeholder="${prevOk?prev:'—'}" id="pi-${k}" inputmode="decimal" oninput="onParam('${k}',this.value,${m.min},${m.max})">
+    <div class="pc-unit">${m.unit}</div>
+    ${prevOk?`<div class="pc-prev" onclick="useVal('${k}',${prev},${m.min},${m.max})">↩ ${prev} ${m.unit}</div>`:''}
+  </div>`;
+}
+
+function useVal(k,v,min,max){const inp=document.getElementById('pi-'+k);if(inp){inp.value=v;onParam(k,v,min,max);}}
+
+function onParam(k,val,min,max){
+  const card=document.getElementById('pc-'+k);const dot=document.getElementById('pd-'+k);if(!card) return;
+  if(val===''||val===null){card.classList.remove('ok','err');if(dot){dot.classList.remove('ok','err');}updateParamCheck();return;}
+  const v=parseFloat(val);const ok=v>=min&&v<=max;
+  card.classList.toggle('ok',ok);card.classList.toggle('err',!ok);
+  if(dot){dot.classList.toggle('ok',ok);dot.classList.toggle('err',!ok);}
+  if(!ok) showAnomaly(k,v,min,max,POINTS[state.idx]);
+  if(!state.lastVals) state.lastVals={};state.lastVals[k]=v;
+  updateParamCheck();autoSave();
+}
+
+function showAnomaly(k,v,min,max,p){
+  const m=PARAM_META[k];const prev=p.prevVals[k];
+  const msgs=[];
+  if(v<min||v>max) msgs.push(`⚠ ${m.label}: ${v} ${m.unit} fora do padrão (${min}–${max})`);
+  if(prev!==null&&prev!==undefined){const diff=Math.abs(v-prev)/Math.max(Math.abs(prev),.001)*100;if(diff>50) msgs.push(`📊 Variação ${diff.toFixed(0)}% vs anterior (${prev} ${m.unit})`);}
+  const el=document.getElementById('anomaly-alert');if(msgs.length){el.style.display='block';el.innerHTML=msgs.join('<br>');}
+}
+
+function updateParamCheck(){
+  const p=POINTS[state.idx];if(!p) return;
+  const relevant=p.type==='inst'?['nivel','prof']:TYPE_PARAMS[p.type]||[];
+  const filled=relevant.filter(k=>{const i=document.getElementById('pi-'+k);return i&&i.value!=='';}).length;
+  const done=filled===relevant.length&&relevant.length>0;
+  setCheck('params',done,`${filled} / ${relevant.length} preenchidos`,done);
+}
+
+function setCheck(id,done,badge,ok=false){
+  const chk=document.getElementById('cl-'+id);const bdg=document.getElementById('clb-'+id);
+  if(!chk||!bdg) return;
+  chk.classList.toggle('on',done);bdg.textContent=badge;bdg.classList.toggle('ok',ok||done);
+  if(!ok&&!done){bdg.style.background='var(--warn-dim)';bdg.style.color='var(--warn)';}else{bdg.style.background='';bdg.style.color='';}
+}
+
+function captureGPS(target){
+  if(target==='start'){
+    const p=POINTS[state.idx]||{coords:[-22.9,-47.0]};
+    document.getElementById('start-lat').textContent=p.coords[0].toFixed(4);
+    document.getElementById('start-lng').textContent=p.coords[1].toFixed(4);
+    document.getElementById('start-acc-val').textContent='±3m';
+    document.getElementById('start-gps-status').textContent='Capturado';document.getElementById('start-gps-status').className='gps-status ok';
+    document.getElementById('start-gps').className='gps-block captured';
+    document.getElementById('start-gps-btn').textContent='✓ GPS capturado';document.getElementById('start-gps-btn').className='gps-capture-btn done';
+  } else if(target==='pt'){
+    const p=POINTS[state.idx];const acc=(2+Math.random()*6).toFixed(1);const an=parseFloat(acc);
+    const col=an<=4?'var(--neon)':an<=8?'var(--warn)':'var(--danger)';const lbl=an<=4?'🟢 Boa':an<=8?'🟡 Média':'🔴 Baixa';
+    document.getElementById('pt-lat').textContent=p.coords[0].toFixed(5);document.getElementById('pt-lng').textContent=p.coords[1].toFixed(5);
+    document.getElementById('pt-acc-val').textContent=`±${acc}m`;document.getElementById('pt-acc-dot').style.background=col;
+    document.getElementById('pt-gps-status').textContent=`Capturado · ${lbl}`;document.getElementById('pt-gps-status').className='gps-status ok';
+    document.getElementById('pt-gps-block').className='gps-block captured';
+    document.getElementById('pt-gps-btn').textContent='✓ Capturado';document.getElementById('pt-gps-btn').className='gps-capture-btn done';
+    document.getElementById('pt-map').innerHTML=`🗺 ${p.coords[0].toFixed(5)}, ${p.coords[1].toFixed(5)} · ${lbl}`;document.getElementById('pt-map').style.background='var(--acc-dim)';
+    setCheck('gps',true,`GPS · ±${acc}m`);autoSave();
+  } else if(target==='new'){document.getElementById('new-gps-status').textContent='Capturado';document.getElementById('new-gps-status').className='gps-status ok';document.getElementById('new-pt-gps').className='gps-block captured';showToast('📍 GPS capturado');}
+}
+
+function useLastGPS(){
+  const p=POINTS[Math.max(0,state.idx-1)];
+  document.getElementById('pt-lat').textContent=p.coords[0].toFixed(5);document.getElementById('pt-lng').textContent=p.coords[1].toFixed(5);
+  document.getElementById('pt-acc-val').textContent='±8m';document.getElementById('pt-acc-dot').style.background='var(--warn)';
+  document.getElementById('pt-gps-status').textContent='Última válida · 🟡';document.getElementById('pt-gps-status').className='gps-status ok';
+  document.getElementById('pt-gps-block').className='gps-block captured';
+  document.getElementById('pt-map').textContent=`🗺 Última localização válida · ±8m`;document.getElementById('pt-map').style.background='var(--warn-dim)';
+  setCheck('gps',true,'GPS · última válida');autoSave();
+}
+
+function addPhoto(idx){
+  if(state.photos[idx]) return;
+  state.photos[idx]=true;state.photoCount++;
+  const el=document.getElementById('ph'+idx);
+  if(el){el.classList.add('filled');el.classList.remove('req');el.innerHTML=`<span style="font-size:28px">${PHOTO_EMOJIS[idx]}</span><span class="photo-ts" style="display:block">${getTime()}</span>`;}
+  const cnt=Math.min(state.photoCount,3);document.getElementById('photo-count').textContent=cnt;
+  const done=state.photoCount>=3;setCheck('photos',done,done?'3 / 3 ✓':`${cnt} / 3`,done);autoSave();
+}
+
+function toggleSkip(){
+  paramsSkipped=!paramsSkipped;
+  document.getElementById('param-grid').style.display=paramsSkipped?'none':'grid';
+  document.getElementById('skip-banner').style.display=paramsSkipped?'block':'none';
+  const btn=document.getElementById('skip-btn');
+  if(paramsSkipped){btn.className='param-action skip on';btn.querySelector('#skip-icon').textContent='✓';btn.querySelector('#skip-label').textContent='Não monitorado';}
+  else{btn.className='param-action skip';btn.querySelector('#skip-icon').textContent='🚫';btn.querySelector('#skip-label').textContent='Não monitorar';}
+}
+
+function togglePiezSkip(){
+  piezSkipped=!piezSkipped;
+  const fg=document.getElementById('piez-fq-grid');const fb=document.getElementById('piez-fq-banner');const btn=document.getElementById('piez-skip-btn');if(!fg) return;
+  if(piezSkipped){Array.from(fg.children).forEach(e=>e.style.display='none');if(fb)fb.style.display='block';if(btn){btn.style.background='var(--warn-dim)';btn.style.color='var(--warn)';document.getElementById('piez-skip-icon').textContent='✓';document.getElementById('piez-skip-label').textContent='Não monitorado';}}
+  else{Array.from(fg.children).forEach(e=>e.style.display='');if(fb)fb.style.display='none';if(btn){btn.style.background='var(--raised)';btn.style.color='var(--sub)';document.getElementById('piez-skip-icon').textContent='🚫';document.getElementById('piez-skip-label').textContent='Não monitorar';}}
+}
+
+function copyLastPoint(){
+  if(!state.lastVals||!Object.keys(state.lastVals).length){showToast('Nenhum dado anterior');return;}
+  const p=POINTS[state.idx];const params=TYPE_PARAMS[p.type]||[];
+  params.forEach(k=>{const inp=document.getElementById('pi-'+k);const m=PARAM_META[k];if(inp&&state.lastVals[k]!==undefined){inp.value=state.lastVals[k];onParam(k,inp.value,m.min,m.max);}});
+  showToast('↩ Dados anteriores copiados','success');
+}
+
+function selectStatus(el){document.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');}
+
+function markDone(){
+  const p=POINTS[state.idx];
+  if(p){const params=TYPE_PARAMS[p.type]||[];params.forEach(k=>{const i=document.getElementById('pi-'+k);if(i&&i.value!=='') state.lastVals[k]=parseFloat(i.value);});}
+  state.status[state.idx]='done';
+  renderOSPoints();renderPointSelectList();
+  showToast(`✅ ${POINTS[state.idx].code} salvo!`,'success');
+  const nextPending=state.status.findIndex(s=>s==='pending');const allDone=state.status.every(s=>s!=='pending');
+  document.getElementById('m-next-title').textContent=`${POINTS[state.idx].code} salvo ✓`;
+  document.getElementById('m-next-sub').textContent=allDone?'Todos os pontos registrados!':'O que fazer agora?';
+  const opts=document.getElementById('m-next-opts');opts.innerHTML='';
+  if(!allDone&&nextPending>=0) opts.innerHTML+=`<div class="sopt hi" onclick="closeModal('m-next');go('s-collect-point');setPoint(${nextPending})"><span class="sopt-icon">📍</span><div class="sopt-body"><div class="sopt-name">Ir para ${POINTS[nextPending].code}</div><div class="sopt-desc">${POINTS[nextPending].name}</div></div><span class="sopt-arr">›</span></div>`;
+  if(allDone) opts.innerHTML+=`<div class="sopt hi" onclick="closeModal('m-next');finishSummary();go('s-finish')"><span class="sopt-icon">✅</span><div class="sopt-body"><div class="sopt-name">Encerrar campo</div><div class="sopt-desc">Todos os pontos coletados</div></div><span class="sopt-arr">›</span></div>`;
+  opts.innerHTML+=`<div class="sopt" onclick="closeModal('m-next');go('s-os')"><span class="sopt-icon">📋</span><div class="sopt-body"><div class="sopt-name">Ver ordem de serviço</div></div><span class="sopt-arr">›</span></div>`;
+  setTimeout(()=>openModal('m-next'),400);
+}
+
+function markNC(){
+  state.status[state.idx]='nc';renderOSPoints();renderPointSelectList();
+  const nextPending=state.status.findIndex(s=>s==='pending');const allDone=state.status.every(s=>s!=='pending');
+  if(allDone){finishSummary();go('s-finish');}else if(nextPending>=0){go('s-collect-point');setPoint(nextPending);}else go('s-os');
+}
+
+function finishSummary(){
+  const done=state.status.filter(s=>s==='done').length;const nc=state.status.filter(s=>s==='nc').length;
+  document.getElementById('fin-subtitle').textContent=`${CAMPAIGNS[currentCampKey].campLabel} · ${new Date().toLocaleDateString('pt-BR')}`;
+  document.getElementById('fin-collected').textContent=`${done} pontos`;document.getElementById('fin-nc').textContent=nc?`${nc} pontos`:'Nenhum';
+}
+
+let saveTimer=null;
+function autoSave(){
+  const dot=document.getElementById('sync-dot');if(!dot) return;
+  dot.style.background='var(--warn)';dot.classList.add('saving');
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{dot.style.background='var(--neon)';dot.classList.remove('saving');},1600);
+}
+
+// ═══ NEW POINT CODE ═══
+const PT_COUNTS={NAS:39,DRN:9,VRT:4,PZ:5};
+function updateNewPtCode(){
+  const t=document.getElementById('new-pt-type').value;
+  document.getElementById('new-pt-code').textContent=`${t}-${String((PT_COUNTS[t]||0)+1).padStart(3,'0')}`;
+}
+
+// ═══ REPORTS ═══
+const REP_MOCK=[
+  {code:'NAS-001',name:'Afloramento N-01',type:'nasc',camp:'CAM-2026-03',date:'21/03/2026',status:'completo',coords:'-6.0012, -50.1468',params:{pH:6.9,temp:26.4,ce:45,od:9.2,orp:218,turb:1.2,vazao:1.8}},
+  {code:'NAS-002',name:'Afloramento N-02',type:'nasc',camp:'CAM-2026-03',date:'21/03/2026',status:'completo',coords:'-6.0029, -50.1455',params:{pH:6.8,temp:27.1,ce:52,od:8.8,orp:205,turb:2.1,vazao:0.9}},
+  {code:'NAS-003',name:'Cabeceira Igarapé Cristal',type:'nasc',camp:'CAM-2026-03',date:'21/03/2026',status:'completo',coords:'-6.0048, -50.1441',params:{pH:7.0,temp:25.8,ce:38,od:9.5,orp:231,turb:0.8,vazao:2.4}},
+  {code:'NAS-004',name:'Afloramento N-04',type:'nasc',camp:'CAM-2026-03',date:'21/03/2026',status:'incompleto',coords:'-6.0063, -50.1428',params:{pH:6.7,temp:27.5,ce:null,od:null,orp:null,turb:3.4,vazao:0.5}},
+  {code:'NAS-008',name:'Revegetação N-08',type:'nasc',camp:'CAM-2026-03',date:'21/03/2026',status:'nao-coletado',coords:'-6.0101, -50.1430',params:{}},
+  {code:'VRT-001',name:'Vertedouro Barragem Leste',type:'vert',camp:'CAM-2026-03',date:'21/03/2026',status:'completo',coords:'-6.0021, -50.1487',params:{vazao:24.8,nivel:1.12,turb:42.5}},
+  {code:'VRT-003',name:'Dreno Emergência Oeste',type:'vert',camp:'CAM-2026-03',date:'21/03/2026',status:'incompleto',coords:'-6.0055, -50.1519',params:{vazao:null,nivel:null,turb:null}},
+  {code:'PZ-001',name:'Piezômetro P-01',type:'inst',camp:'CAM-2026-03',date:'21/03/2026',status:'completo',coords:'-6.0033, -50.1495',params:{nivel:4.82,prof:12.0,pH:6.9,temp:25.1,ce:38,od:9.0}},
+  {code:'PZ-004',name:'Piezômetro P-04',type:'inst',camp:'CAM-2026-03',date:'21/03/2026',status:'nao-coletado',coords:'-6.0075, -50.1456',params:{}},
+  {code:'DRN-007',name:'Saída Córrego Piçarrão',type:'dren',camp:'CAM-2026-03',date:'21/03/2026',status:'completo',coords:'-22.7701, -47.1618',params:{vazao:98.2,nivel:1.34,turb:85.6}},
+];
+
+let repPtSel=new Set();
+function initRepChips(){
+  const container=document.getElementById('rep-point-chips');if(!container) return;
+  const codes=[...new Set(REP_MOCK.map(c=>c.code))];repPtSel=new Set(codes);
+  container.innerHTML=codes.map(code=>`<div class="filter-chip on rep-pt-chip" data-code="${code}" onclick="this.classList.toggle('on');repPtSel[this.classList.contains('on')?'add':'delete']('${code}')" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.5px">${code}</div>`).join('');
+}
+function repSelectAll(){document.querySelectorAll('.rep-pt-chip').forEach(el=>{el.classList.add('on');repPtSel.add(el.dataset.code);});}
+function generateReport(){
+  const camp=document.getElementById('rep-camp')?.value||'';const from=document.getElementById('rep-from')?.value||'';const to=document.getElementById('rep-to')?.value||'';
+  let filtered=REP_MOCK.filter(c=>repPtSel.has(c.code));
+  const block=document.getElementById('rep-results-block');const list=document.getElementById('rep-results-list');
+  const count=document.getElementById('rep-count-label');const summ=document.getElementById('rep-filter-summary');
+  block.style.display='block';count.textContent=`${filtered.length} ponto${filtered.length!==1?'s':''} encontrado${filtered.length!==1?'s':''}`;
+  const campName=camp?{vale:'Vale Carajás',cubatao:'Cubatão',paulinia:'Paulínia'}[camp]||'Todos':'Todas as campanhas';
+  summ.textContent=`${campName} · ${from.replace('-','/')} → ${to.replace('-','/')}`;
+  if(!filtered.length){list.innerHTML=`<div style="padding:16px;text-align:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--sub);background:var(--surface);border:1px solid var(--line2);border-radius:14px">Nenhuma coleta encontrada</div>`;return;}
+  const typeLabel={nasc:'Nascente',vert:'Vertedouro',dren:'Drenagem',inst:'Piezômetro'};
+  list.innerHTML=filtered.map(c=>{
+    const stBg=c.status==='completo'?'var(--acc-dim)':c.status==='incompleto'?'var(--warn-dim)':'var(--danger-dim)';
+    const stCol=c.status==='completo'?'var(--acc)':c.status==='incompleto'?'var(--warn)':'var(--danger)';
+    const stLbl=c.status==='completo'?'✔ COMPLETO':c.status==='incompleto'?'⚠ INCOMPLETO':'✖ NÃO COLETADO';
+    return `<div style="background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px;transition:border-color .15s" onmouseover="this.style.borderColor='var(--line)'" onmouseout="this.style.borderColor='var(--line2)'">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap">
+            <span style="font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--acc);letter-spacing:1px">${c.code}</span>
+            <span style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:${stBg};color:${stCol};letter-spacing:.5px">${stLbl}</span>
+          </div>
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub);margin-top:2px">${typeLabel[c.type]} · ${c.camp} · ${c.date}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px">
+        <div onclick="openRepDetail('${c.code}')" style="text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:7px;border-radius:10px;background:var(--raised);color:var(--text);border:1px solid var(--line2);cursor:pointer;letter-spacing:.3px">👁 VER</div>
+        <div onclick="showToast('📄 PDF · ${c.code}')" style="text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:7px;border-radius:10px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line);cursor:pointer;letter-spacing:.3px">📄 PDF</div>
+        <div onclick="showToast('📊 Excel · ${c.code}')" style="text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:7px;border-radius:10px;background:var(--sky-dim);color:var(--sky);border:1px solid rgba(14,165,233,.2);cursor:pointer;letter-spacing:.3px">📊 XLS</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('s-reports').scrollTo({top:400,behavior:'smooth'});
+}
+
+function openRepDetail(code){
+  const c=REP_MOCK.find(x=>x.code===code);if(!c) return;
+  const tl={nasc:'Nascente',vert:'Vertedouro',dren:'Drenagem',inst:'Piezômetro'};
+  const pl={pH:'pH',temp:'Temperatura (°C)',ce:'CE (µS/cm)',od:'OD (mg/L)',orp:'ORP (mV)',turb:'Turbidez (NTU)',vazao:'Vazão (L/s)',nivel:'Nível (m)',prof:'Profundidade (m)'};
+  document.getElementById('repd-title').textContent=c.code;document.getElementById('repd-sub').textContent=`${tl[c.type]} · ${c.camp}`;
+  document.getElementById('repd-code').textContent=c.code;document.getElementById('repd-type').textContent=tl[c.type];
+  document.getElementById('repd-camp').textContent=c.camp;document.getElementById('repd-date').textContent=c.date+' · 09:14';
+  document.getElementById('repd-coords').textContent=c.coords;
+  const pEl=document.getElementById('repd-params');const pKeys=Object.keys(c.params).filter(k=>c.params[k]!==null);
+  if(!pKeys.length){pEl.innerHTML=`<div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--warn);padding:8px 0">SEM PARÂMETROS REGISTRADOS</div>`;}
+  else{pEl.innerHTML=pKeys.map((k,i)=>`<div style="display:flex;justify-content:space-between;padding:7px 0;${i<pKeys.length-1?'border-bottom:1px solid var(--line2)':''}"><span style="font-size:12px;color:var(--sub)">${pl[k]||k}</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--neon);font-weight:700">${c.params[k]}</span></div>`).join('');}
+  go('s-rep-detail');nav('n-reports');
+}
+
+// ═══ CALENDAR ═══
+const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const MONTHS_S=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MONTHS_A=['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+const DAYS_IN=[31,28,31,30,31,30,31,31,30,31,30,31];
+const CAL_EVENTS={'2026-2-21':[{name:'Vale Carajás',camp:'CAM-2026-03',pts:18,client:'Vale S.A.',status:'campo'}],'2026-2-23':[{name:'Vale Carajás',camp:'CAM-2026-03',pts:18,client:'Vale S.A.',status:'campo'},{name:'Cubatão Nascentes',camp:'CAM-2026-03',pts:12,client:'Cubatão S.A.',status:'campo'}],'2026-2-24':[{name:'Cubatão Nascentes',camp:'CAM-2026-03',pts:12,client:'Cubatão S.A.',status:'campo'}],'2026-2-25':[{name:'Cubatão Nascentes',camp:'CAM-2026-03',pts:12,client:'Cubatão S.A.',status:'campo'},{name:'Paulínia Drenagens',camp:'CAM-2026-03',pts:9,client:'Paulínia S.A.',status:'nova'}],'2026-2-26':[{name:'Paulínia Drenagens',camp:'CAM-2026-03',pts:9,client:'Paulínia S.A.',status:'nova'}],'2026-2-27':[{name:'Paulínia Drenagens',camp:'CAM-2026-03',pts:9,client:'Paulínia S.A.',status:'nova'}],'2026-3-3':[{name:'Piracicaba ETDI',camp:'CAM-2026-04',pts:5,client:'SABESP',status:'previsto'}],'2026-3-10':[{name:'Sorocaba Rio',camp:'CAM-2026-04',pts:12,client:'CPFL',status:'previsto'}],'2026-4-5':[{name:'Jundiaí ETDI',camp:'CAM-2026-05',pts:9,client:'SABESP',status:'previsto'}],'2026-4-12':[{name:'Paraíba do Sul',camp:'CAM-2026-05',pts:14,client:'CPFL',status:'previsto'}]};
+let calMonth=2,selDay=21;
+function prevMonth(){if(calMonth>2){calMonth--;selDay=1;renderCal();}}
+function nextMonth(){if(calMonth<11){calMonth++;selDay=1;renderCal();}}
+function renderCal(){
+  const lbl=document.getElementById('cal-month-label');if(!lbl) return;
+  lbl.innerHTML=`${MONTHS[calMonth]} <span style="color:var(--acc)">2026</span>`;
+  document.getElementById('cal-prev').style.opacity=calMonth<=2?'0.3':'1';
+  document.getElementById('cal-next').style.opacity=calMonth>=11?'0.3':'1';
+  const grid=document.getElementById('cal-grid');const total=DAYS_IN[calMonth];
+  const first=new Date(2026,calMonth,1).getDay();const today=calMonth===2?21:-1;
+  let html='';
+  for(let i=0;i<first;i++) html+='<div></div>';
+  for(let d=1;d<=total;d++){
+    const key=`2026-${calMonth}-${d}`;const dot=!!CAL_EVENTS[key];const isT=d===today,isSel=d===selDay;
+    html+=`<div class="cal-day${isT?' today':''}${isSel?' sel':''}" onclick="selCalDay(${d})"><span class="cal-day-num" style="font-family:'Space Mono',monospace;font-size:11px">${d}</span>${dot&&!isSel?'<div class="cal-day-dot"></div>':''}</div>`;
+  }
+  grid.innerHTML=html;renderCalEvents();renderCalUpcoming();
+}
+function selCalDay(d){selDay=d;renderCal();}
+function psty(s){return s==='campo'?'background:var(--sky-dim);color:var(--sky)':s==='nova'?'background:var(--acc-dim);color:var(--acc)':s==='prazo'?'background:var(--warn-dim);color:var(--warn)':'background:var(--raised);color:var(--sub)';}
+function ptxt(s){return {campo:'EM CAMPO',nova:'NOVA',previsto:'PREVISTO',prazo:'PRAZO'}[s]||s;}
+function renderCalEvents(){
+  const key=`2026-${calMonth}-${selDay}`;const evts=CAL_EVENTS[key];
+  document.getElementById('cal-day-label').textContent=`Campanhas — ${selDay} ${MONTHS_S[calMonth]}`;
+  const cont=document.getElementById('cal-events');
+  if(!evts||!evts.length){cont.innerHTML=`<div style="margin:0 24px 16px;padding:14px;text-align:center;font-family:'Space Mono',monospace;font-size:11px;color:var(--sub);background:var(--surface);border:1px solid var(--line2);border-radius:14px">SEM CAMPANHAS NESTE DIA</div>`;return;}
+  cont.innerHTML=evts.map(e=>`<div class="cal-event" onclick="go('s-os')"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px"><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sub);letter-spacing:1px">${e.camp}</div><span style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;${psty(e.status)}">${ptxt(e.status)}</span></div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">${e.name}</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub)">${e.pts} PONTOS · ${e.client}</div></div>`).join('');
+}
+function renderCalUpcoming(){
+  const upCont=document.getElementById('cal-upcoming');const upLbl=document.getElementById('cal-up-label');const upDiv=document.getElementById('cal-up-div');
+  const up=[];
+  for(let m=calMonth;m<=11;m++){const days=DAYS_IN[m];const sd=m===calMonth?selDay+1:1;for(let d=sd;d<=days;d++){const key=`2026-${m}-${d}`;if(CAL_EVENTS[key])CAL_EVENTS[key].forEach(e=>up.push({...e,day:d,month:m}));if(up.length>=4)break;}if(up.length>=4)break;}
+  if(!up.length){upLbl.style.display='none';upDiv.style.display='none';upCont.innerHTML='';return;}
+  upLbl.style.display='block';upDiv.style.display='block';
+  upLbl.textContent=`Próximas — ${MONTHS[up[0].month]} 2026`;
+  upCont.innerHTML=up.map(e=>`<div style="margin:0 24px 8px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start;cursor:pointer" onclick="go('s-os')"><div style="text-align:center;flex-shrink:0;min-width:32px"><div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1.5px">${MONTHS_A[e.month]}</div><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--text);line-height:1.1">${e.day}</div></div><div style="width:1px;background:var(--line2);align-self:stretch;flex-shrink:0"></div><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">${e.camp} — ${e.name}</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub)">${e.pts} PTS · ${e.client}</div><span style="display:inline-block;margin-top:6px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;${psty(e.status)}">${ptxt(e.status)}</span></div></div>`).join('');
+}
+
+// ═══ UTILS ═══
+function getTime(){const n=new Date();return `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;}
+function showToast(msg,type='',dur=2200){const t=document.getElementById('toast');if(!t) return;t.textContent=msg;t.className='toast show'+(type?(' '+type):'');setTimeout(()=>t.className='toast',dur);}
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);if(el){el.classList.add('active');el.scrollTop=0;}}
+function nav(id){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));const el=document.getElementById(id);if(el)el.classList.add('on');}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeOnBg(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+function filterChip(el){document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+function selNC(el){document.querySelectorAll('.nc-reason').forEach(r=>r.classList.remove('on'));el.classList.add('on');}
+function toggleTheme(){
+  const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';
+  h.setAttribute('data-theme',d?'light':'dark');
+  document.getElementById('theme-icon').textContent=d?'☀️':'🌙';
+  document.getElementById('theme-lbl').textContent=d?'Modo claro':'Modo escuro';
+  document.getElementById('tg-k').textContent=d?'☀️':'🌙';
+}
+
+// Animate home bar on load
+setTimeout(()=>{
+  const fill=document.getElementById('home-prog-fill');
+  const pct=document.getElementById('home-prog-pct');
+  if(fill){fill.style.width='0%';if(pct) pct.textContent='0%';}
+},100);
+
+// ═══ INIT ═══
+openCampaign('vale');
+renderDB();
+renderCal();
+renderPointSelectList();
+initRepChips();
+</script>
+</body>
+</html>
