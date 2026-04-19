@@ -673,6 +673,63 @@ textarea.fi{resize:none;line-height:1.6;}
 /* NEON DOT PULSE */
 @keyframes neon-pulse{0%,100%{box-shadow:0 0 4px var(--neon);}50%{box-shadow:0 0 12px var(--neon),0 0 20px var(--neon);}}
 .neon-dot{animation:neon-pulse 2s infinite;background:var(--neon);}
+
+/* ── REPORT PREVIEW ── */
+.rp-toolbar{padding:48px 16px 12px;background:var(--bg);}
+.rp-btn{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:8px 14px;border-radius:12px;border:1px solid var(--line);background:var(--acc-dim);color:var(--acc);cursor:pointer;white-space:nowrap;}
+.rsheet{background:#fff;color:#111;padding:28px 24px;margin-bottom:16px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.15);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.rp-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0F7A4E;padding-bottom:12px;margin-bottom:16px;gap:12px;}
+.rp-head-left .rp-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#0F172A;letter-spacing:-.3px;}
+.rp-head-left .rp-logo em{color:#0F7A4E;font-style:normal;}
+.rp-head-left .rp-form{font-size:9px;color:#64748B;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+.rp-head-right{text-align:right;font-family:'Space Mono',monospace;font-size:10px;color:#64748B;line-height:1.6;}
+.rp-title-row{background:#F3F4F6;border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.rp-title-row .rp-code{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#0F7A4E;letter-spacing:1px;}
+.rp-title-row .rp-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#0F172A;margin:2px 0;}
+.rp-title-row .rp-sub{font-size:10px;color:#64748B;font-family:'Space Mono',monospace;line-height:1.5;}
+.rp-status{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;margin-top:6px;}
+.rp-status.completo{background:#D1FAE5;color:#065F46;}
+.rp-status.incompleto{background:#FEF3C7;color:#92400E;}
+.rp-status.nao-coletado{background:#FEE2E2;color:#991B1B;}
+.rp-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.rp-box{border:1px solid #D1D5DB;border-radius:8px;padding:10px 12px;}
+.rp-box-label{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748B;margin-bottom:3px;}
+.rp-box-value{font-size:12px;font-weight:600;color:#111;}
+.rp-section-title{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#64748B;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #E5E7EB;}
+.rp-table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px;}
+.rp-table th{background:#F3F4F6;padding:7px 10px;text-align:left;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#64748B;border:1px solid #E5E7EB;}
+.rp-table td{padding:7px 10px;border:1px solid #E5E7EB;color:#111;vertical-align:middle;}
+.rp-table td.result{font-family:'Space Mono',monospace;font-weight:700;color:#0F7A4E;text-align:right;}
+.rp-table td.result.null{color:#9CA3AF;}
+.rp-kv{display:grid;grid-template-columns:170px 1fr;gap:6px 12px;margin-bottom:14px;font-size:11px;}
+.rp-kv dt{color:#64748B;font-weight:600;}
+.rp-kv dd{color:#111;margin:0;font-family:'Space Mono',monospace;font-size:10px;word-break:break-word;}
+.rp-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.rp-photo-slot{aspect-ratio:4/3;border:1px solid #D1D5DB;border-radius:8px;overflow:hidden;position:relative;background:#F9FAFB;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.rp-photo-slot img{width:100%;height:100%;object-fit:cover;display:block;}
+.rp-photo-empty{font-size:20px;color:#D1D5DB;}
+.rp-photo-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:14px 6px 5px;font-family:'Space Mono',monospace;font-size:7px;color:#00FFB2;line-height:1.2;}
+.rp-sig{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:14px;margin-bottom:14px;}
+.rp-sig-line{border-top:1px solid #374151;padding-top:8px;font-size:10px;color:#64748B;}
+.rp-sig-name{font-size:12px;font-weight:600;color:#111;margin-top:2px;}
+.rp-foot{font-size:9px;color:#9CA3AF;border-top:1px solid #E5E7EB;padding-top:8px;text-align:center;line-height:1.5;}
+.rp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.rp-tag{font-size:10px;padding:2px 8px;border-radius:20px;background:#D1FAE5;color:#065F46;border:1px solid #A7F3D0;}
+.rp-empty{padding:10px 0;font-family:'Space Mono',monospace;font-size:10px;color:#9CA3AF;}
+
+@media print{
+  html,body{background:#fff !important;}
+  body{padding:0 !important;display:block !important;}
+  body>*:not(.phone){display:none !important;}
+  .phone>*:not(#s-rep-preview){display:none !important;}
+  .notch,.sb,.bnav,.overlay,.toast{display:none !important;}
+  .phone{width:auto !important;height:auto !important;background:#fff !important;border-radius:0 !important;box-shadow:none !important;overflow:visible !important;padding:0 !important;position:static !important;}
+  #s-rep-preview{position:static !important;display:block !important;opacity:1 !important;transform:none !important;padding:0 !important;background:#fff !important;overflow:visible !important;}
+  #s-rep-preview .rp-toolbar{display:none !important;}
+  .rsheet{box-shadow:none !important;padding:18mm 14mm !important;page-break-after:always;}
+  .rsheet:last-child{page-break-after:auto;}
+  @page{size:A4;margin:0;}
+}
 </style>
 </head>
 <body>
@@ -1288,7 +1345,7 @@ textarea.fi{resize:none;line-height:1.6;}
         <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--sub);margin-top:1px" id="rep-filter-summary">—</div>
       </div>
       <div style="display:flex;gap:6px">
-        <div onclick="showToast('📄 PDF gerado!')" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:6px 10px;border-radius:10px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line);cursor:pointer">📄 PDF</div>
+        <div onclick="openCampaignReportFromFilter()" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:6px 10px;border-radius:10px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line);cursor:pointer">📄 PDF</div>
         <div onclick="showToast('📊 Excel exportado!')" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:6px 10px;border-radius:10px;background:var(--sky-dim);color:var(--sky);border:1px solid rgba(14,165,233,.2);cursor:pointer">📊 Excel</div>
       </div>
     </div>
@@ -1299,17 +1356,17 @@ textarea.fi{resize:none;line-height:1.6;}
   <div style="height:1px;background:var(--line2);margin:0 24px 18px"></div>
   <div class="section-head">Histórico de relatórios</div>
   <div style="padding:0 24px;margin-bottom:20px">
-    <div class="hist-item" onclick="showToast('Abrindo relatório…')">
+    <div class="hist-item" onclick="openCampaignReport('vale')">
       <div class="hist-icon" style="background:var(--acc-dim)">📄</div>
       <div style="flex:1"><div class="hist-name">Vale Carajás · Mar/2026</div><div class="hist-meta">PDF · 18 pontos · Hoje 09:45</div></div>
       <div class="hist-dl" style="background:var(--acc-dim);color:var(--acc)">↓</div>
     </div>
-    <div class="hist-item" onclick="showToast('Abrindo relatório…')">
+    <div class="hist-item" onclick="openCampaignReport('cubatao')">
       <div class="hist-icon" style="background:var(--sky-dim)">📊</div>
       <div style="flex:1"><div class="hist-name">Cubatão Nascentes · Mar/2026</div><div class="hist-meta">Excel · 12 pontos · Hoje 08:30</div></div>
       <div class="hist-dl" style="background:var(--sky-dim);color:var(--sky)">↓</div>
     </div>
-    <div class="hist-item" onclick="showToast('Abrindo relatório…')">
+    <div class="hist-item" onclick="openCampaignReport('paulinia')">
       <div class="hist-icon" style="background:var(--acc-dim)">📄</div>
       <div style="flex:1"><div class="hist-name">Paulínia Drenagens · Fev/2026</div><div class="hist-meta">PDF · 9 pontos · 18/02/2026</div></div>
       <div class="hist-dl" style="background:var(--acc-dim);color:var(--acc)">↓</div>
@@ -1330,7 +1387,7 @@ textarea.fi{resize:none;line-height:1.6;}
   </div>
   <div class="fbody">
     <div class="btn-row" style="margin-bottom:16px">
-      <button class="btn prim" onclick="showToast('📄 PDF deste ponto gerado!')" style="padding:12px;font-size:13px">📄 Gerar PDF</button>
+      <button class="btn prim" onclick="openCurrentRepPDF()" style="padding:12px;font-size:13px">📄 Gerar PDF</button>
       <button class="btn sec" onclick="showToast('📊 Excel exportado!')" style="padding:12px;font-size:13px">📊 Excel</button>
     </div>
     <div style="background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:16px;margin-bottom:14px">
@@ -1460,11 +1517,21 @@ textarea.fi{resize:none;line-height:1.6;}
 <div class="overlay" id="m-finish" onclick="closeOnBg(event,'m-finish')">
   <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">Enviar dados</div><div class="sheet-sub">Escolha como encaminhar a campanha.</div>
     <div class="sopts">
-      <div class="sopt hi" onclick="closeModal('m-finish');go('s-home');nav('n-home')"><span class="sopt-icon">📄</span><div class="sopt-body"><div class="sopt-name">Gerar relatório PDF</div><div class="sopt-desc">Com fotos e parâmetros</div></div><span class="sopt-arr">›</span></div>
+      <div class="sopt hi" onclick="closeModal('m-finish');openCampaignReport(currentCampKey)"><span class="sopt-icon">📄</span><div class="sopt-body"><div class="sopt-name">Gerar relatório PDF</div><div class="sopt-desc">Com fotos e parâmetros</div></div><span class="sopt-arr">›</span></div>
       <div class="sopt" onclick="closeModal('m-finish');go('s-home');nav('n-home')"><span class="sopt-icon">☁</span><div class="sopt-body"><div class="sopt-name">Enviar à plataforma</div><div class="sopt-desc">Analista recebe para revisão</div></div><span class="sopt-arr">›</span></div>
       <div class="sopt" onclick="closeModal('m-finish')"><span class="sopt-icon">💾</span><div class="sopt-body"><div class="sopt-name">Salvar localmente</div><div class="sopt-desc">Sincronizar depois</div></div><span class="sopt-arr">›</span></div>
     </div>
   </div>
+</div>
+
+<!-- ═══ REP PREVIEW ═══ -->
+<div class="screen" id="s-rep-preview">
+  <div class="fbar rp-toolbar">
+    <div class="back" onclick="go(rprevBack||'s-rep-detail');nav('n-reports')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div style="flex:1"><div class="fbar-t">Relatório de Coleta</div><div class="fbar-s" id="rprev-sub">—</div></div>
+    <button class="rp-btn" onclick="printReport()">🖨 Imprimir · PDF</button>
+  </div>
+  <div id="rprev-body" style="padding:16px 10px"></div>
 </div>
 
 <!-- BOTTOM NAV -->
@@ -1533,6 +1600,7 @@ const PHOTO_GUIDES={nasc:'🌿 Geral: entorno e contexto<br>💧 Detalhe: aflora
 
 let currentCampKey='vale',POINTS=[],state={idx:0,status:[],photos:[],photoCount:0,skipped:false,lastVals:{}};
 let piezSkipped=false,paramsSkipped=false;
+let collected={},currentRepCode='',rprevBack='s-rep-detail';
 
 // ═══ CAMPAIGN ═══
 function openCampaign(key){
@@ -1823,6 +1891,12 @@ function selectStatus(el){document.querySelectorAll('.status-opt').forEach(o=>o.
 function markDone(){
   const p=POINTS[state.idx];
   if(p){const params=TYPE_PARAMS[p.type]||[];params.forEach(k=>{const i=document.getElementById('pi-'+k);if(i&&i.value!=='') state.lastVals[k]=parseFloat(i.value);});}
+  if(p){
+    const capturedParams={};
+    (TYPE_PARAMS[p.type]||[]).forEach(k=>{const i=document.getElementById('pi-'+k);if(i&&i.value!=='') capturedParams[k]=parseFloat(i.value);});
+    const latText=document.getElementById('pt-lat')?.textContent;const lngText=document.getElementById('pt-lng')?.textContent;
+    collected[p.code]={code:p.code,name:p.name,type:p.type,params:capturedParams,photos:state.photos.filter(x=>x&&typeof x==='string'),coords:latText&&latText!=='—'?`${latText}, ${lngText}`:p.coords.join(', '),gpsAcc:document.getElementById('pt-acc-val')?.textContent||'',obs:document.getElementById('obs-text')?.value||'',obsTags:[...document.querySelectorAll('.obs-tag.on')].map(t=>t.textContent),time:getTime(),date:new Date().toLocaleDateString('pt-BR'),campKey:currentCampKey};
+  }
   state.status[state.idx]='done';
   renderOSPoints();renderPointSelectList();
   showToast(`✅ ${POINTS[state.idx].code} salvo!`,'success');
@@ -1911,7 +1985,7 @@ function generateReport(){
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px">
         <div onclick="openRepDetail('${c.code}')" style="text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:7px;border-radius:10px;background:var(--raised);color:var(--text);border:1px solid var(--line2);cursor:pointer;letter-spacing:.3px">👁 VER</div>
-        <div onclick="showToast('📄 PDF · ${c.code}')" style="text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:7px;border-radius:10px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line);cursor:pointer;letter-spacing:.3px">📄 PDF</div>
+        <div onclick="openReportPreview('${c.code}','s-reports')" style="text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:7px;border-radius:10px;background:var(--acc-dim);color:var(--acc);border:1px solid var(--line);cursor:pointer;letter-spacing:.3px">📄 PDF</div>
         <div onclick="showToast('📊 Excel · ${c.code}')" style="text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:7px;border-radius:10px;background:var(--sky-dim);color:var(--sky);border:1px solid rgba(14,165,233,.2);cursor:pointer;letter-spacing:.3px">📊 XLS</div>
       </div>
     </div>`;
@@ -1920,7 +1994,8 @@ function generateReport(){
 }
 
 function openRepDetail(code){
-  const c=REP_MOCK.find(x=>x.code===code);if(!c) return;
+  currentRepCode=code;
+  const c=REP_MOCK.find(x=>x.code===code)||collectedToRep(code);if(!c) return;
   const tl={nasc:'Nascente',vert:'Vertedouro',dren:'Drenagem',inst:'Piezômetro'};
   const pl={pH:'pH',temp:'Temperatura (°C)',ce:'CE (µS/cm)',od:'OD (mg/L)',orp:'ORP (mV)',turb:'Turbidez (NTU)',vazao:'Vazão (L/s)',nivel:'Nível (m)',prof:'Profundidade (m)'};
   document.getElementById('repd-title').textContent=c.code;document.getElementById('repd-sub').textContent=`${tl[c.type]} · ${c.camp}`;
@@ -1932,6 +2007,112 @@ function openRepDetail(code){
   else{pEl.innerHTML=pKeys.map((k,i)=>`<div style="display:flex;justify-content:space-between;padding:7px 0;${i<pKeys.length-1?'border-bottom:1px solid var(--line2)':''}"><span style="font-size:12px;color:var(--sub)">${pl[k]||k}</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--neon);font-weight:700">${c.params[k]}</span></div>`).join('');}
   go('s-rep-detail');nav('n-reports');
 }
+
+// ═══ REPORT GENERATION ═══
+const TYPE_LABEL={nasc:'Nascente',vert:'Vertedouro',dren:'Drenagem',inst:'Piezômetro'};
+const PARAM_ROW={pH:{label:'pH',unit:'',method:'SMEWW 4500H+ B'},temp:{label:'Temperatura',unit:'°C',method:'SMEWW 2550 B'},ce:{label:'Condutividade Elétrica',unit:'µS/cm',method:'SMEWW 2510 B'},od:{label:'Oxigênio Dissolvido',unit:'mg/L',method:'SMEWW 4500 O G'},orp:{label:'Potencial Redox (ORP)',unit:'mV',method:'SMEWW 2580 B'},turb:{label:'Turbidez',unit:'NTU',method:'SMEWW 2130 B'},vazao:{label:'Vazão',unit:'L/s',method:'Flutuador / vertedouro'},nivel:{label:"Nível d'água",unit:'m',method:'Fita/sensor de nível'},prof:{label:'Profundidade',unit:'m',method:'Fita graduada'}};
+const PHOTO_CAPTIONS={nasc:['Vista geral do ponto','Detalhe do afloramento','Sonda / medidor em uso','Entorno','Descarga','Complementar'],vert:['Vertedouro e canal','Detalhe do escoamento','Calha / medidor','Montante','Jusante','Complementar'],dren:['Drenagem e entorno','Saída do dreno','Medidor de vazão','Montante','Jusante','Complementar'],inst:['Casing do piezômetro','Detalhe do nível','Medidor em operação','Identificação','Proteção','Complementar']};
+
+function esc(s){return s==null?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function collectedToRep(code){
+  const d=collected[code];if(!d) return null;
+  const c=CAMPAIGNS[d.campKey]||{};
+  return {code:d.code,name:d.name,type:d.type,camp:c.campId||'',date:d.date,status:'completo',coords:d.coords,params:d.params,photos:d.photos||[],obs:d.obs,obsTags:d.obsTags||[],time:d.time,gpsAcc:d.gpsAcc,campKey:d.campKey,client:c.client,gerente:c.gerente,projectNum:c.num,cc:c.cc,campLabel:c.campLabel};
+}
+
+function getReportData(code){
+  if(collected[code]){
+    const d=collected[code];const c=CAMPAIGNS[d.campKey]||{};
+    return {code:d.code,name:d.name,type:d.type,camp:c.campId||'',date:d.date,time:d.time,status:'completo',coords:d.coords,gpsAcc:d.gpsAcc,params:d.params,photos:d.photos||[],obs:d.obs,obsTags:d.obsTags||[],campKey:d.campKey,client:c.client,gerente:c.gerente,projectNum:c.num,cc:c.cc,campLabel:c.campLabel,fromField:true};
+  }
+  const m=REP_MOCK.find(x=>x.code===code);if(!m) return null;
+  const campKey=Object.keys(CAMPAIGNS).find(k=>CAMPAIGNS[k].pointCodes.includes(code))||'vale';
+  const c=CAMPAIGNS[campKey]||{};
+  return {...m,photos:[],obs:'Afloramento em boas condições. Vazão visualmente estável.',obsTags:['🔵 Água clara','✅ Sem odor'],time:'09:14',gpsAcc:'±3m',campKey,client:c.client,gerente:c.gerente,projectNum:c.num,cc:c.cc,campLabel:c.campLabel};
+}
+
+function buildReportHTML(r){
+  const today=new Date().toLocaleDateString('pt-BR');
+  const params=TYPE_PARAMS[r.type]||[];
+  const captions=PHOTO_CAPTIONS[r.type]||PHOTO_CAPTIONS.nasc;
+  const statusClass=r.status==='completo'?'completo':r.status==='incompleto'?'incompleto':'nao-coletado';
+  const statusLabel=r.status==='completo'?'✔ COMPLETO':r.status==='incompleto'?'⚠ INCOMPLETO':'✖ NÃO COLETADO';
+  const paramRows=params.map(k=>{const pr=PARAM_ROW[k];if(!pr) return '';const val=r.params&&r.params[k]!=null?r.params[k]:null;const cls=val==null?'null':'';return `<tr><td>${esc(pr.label)}</td><td class="result ${cls}">${val!=null?val:'—'}</td><td>${esc(pr.unit)}</td><td style="color:#9CA3AF;font-size:10px">${esc(pr.method)}</td></tr>`;}).join('');
+  const photoSlots=Array.from({length:6},(_,i)=>{const url=r.photos&&r.photos[i];const cap=captions[i]||'Foto '+(i+1);const ts=r.time||'09:00';if(url) return `<div class="rp-photo-slot"><img src="${url}" alt="${esc(cap)}"><div class="rp-photo-cap">${esc(cap)}<br>${ts}</div></div>`;return `<div class="rp-photo-slot"><span class="rp-photo-empty">📷</span><div style="font-size:7px;color:#9CA3AF;padding:4px;text-align:center">${esc(cap)}</div></div>`;}).join('');
+  return `<div class="rsheet">
+  <div class="rp-head">
+    <div class="rp-head-left">
+      <div class="rp-logo">Enviro<em>Track</em></div>
+      <div class="rp-form">Sistema de Gestão Integrada — Relatório de Ensaio</div>
+      <div class="rp-form" style="margin-top:2px">Formulário: F.057.03 · Revisão: 00</div>
+    </div>
+    <div class="rp-head-right">${esc(r.campLabel||'—')}<br>${esc(r.camp||'—')}<br>CC: ${esc(r.cc||'—')}<br>Emissão: ${today}</div>
+  </div>
+  <div class="rp-title-row">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div><div class="rp-code">${esc(r.code)}</div><div class="rp-name">${esc(r.name)}</div><div class="rp-sub">${esc(TYPE_LABEL[r.type]||r.type)} · Coleta ${esc(r.date)} · ${esc(r.time||'—')} · ${esc(r.coords||'—')}</div></div>
+      <span class="rp-status ${statusClass}">${statusLabel}</span>
+    </div>
+  </div>
+  <div class="rp-grid2">
+    <div class="rp-box"><div class="rp-box-label">Cliente</div><div class="rp-box-value">${esc(r.client||'—')}</div></div>
+    <div class="rp-box"><div class="rp-box-label">Projeto</div><div class="rp-box-value">${esc(r.campLabel||'—')}</div></div>
+    <div class="rp-box"><div class="rp-box-label">Gerente</div><div class="rp-box-value">${esc(r.gerente||'—')}</div></div>
+    <div class="rp-box"><div class="rp-box-label">Centro de Custo</div><div class="rp-box-value">${esc(r.cc||'—')}</div></div>
+    <div class="rp-box"><div class="rp-box-label">Campanha</div><div class="rp-box-value">${esc(r.camp||'—')}</div></div>
+    <div class="rp-box"><div class="rp-box-label">Técnico</div><div class="rp-box-value">Carlos Almeida</div></div>
+  </div>
+  <div class="rp-section-title">Parâmetros medidos</div>
+  ${params.length?`<table class="rp-table"><thead><tr><th>Parâmetro</th><th style="text-align:right">Resultado</th><th>Unidade</th><th>Método</th></tr></thead><tbody>${paramRows}</tbody></table>`:'<div class="rp-empty">SEM PARÂMETROS PARA ESTE TIPO DE PONTO</div>'}
+  <div class="rp-section-title">Dados de campo</div>
+  <dl class="rp-kv">
+    <dt>Coordenadas</dt><dd>${esc(r.coords||'—')}${r.gpsAcc?' · '+esc(r.gpsAcc):''}</dd>
+    <dt>Data / Hora</dt><dd>${esc(r.date||'—')} ${esc(r.time||'')}</dd>
+    <dt>Condições observadas</dt><dd>${r.obsTags&&r.obsTags.length?r.obsTags.join(', '):'—'}</dd>
+    <dt>Observações</dt><dd style="font-family:inherit;font-size:11px">${esc(r.obs||'—')}</dd>
+    <dt>Amostra conservada</dt><dd>Não aplicável</dd>
+  </dl>
+  <div class="rp-section-title">Registro fotográfico</div>
+  <div class="rp-photos">${photoSlots}</div>
+  <div class="rp-sig">
+    <div class="rp-sig-line">Técnico responsável pela coleta<div class="rp-sig-name">Carlos Almeida · CRBio 12.345</div></div>
+    <div class="rp-sig-line">Analista / Gerente<div class="rp-sig-name">${esc(r.gerente||'—')}</div></div>
+  </div>
+  <div class="rp-foot">Documento de uso restrito · EnviroTrack SGI · Reprodução não autorizada sem aprovação técnica<br>${esc(r.code)} · ${esc(r.camp||'—')} · Emitido em ${today}</div>
+</div>`;
+}
+
+function openReportPreview(code,from){
+  rprevBack=from||'s-rep-detail';
+  const r=getReportData(code);if(!r){showToast('⚠ Dados não encontrados');return;}
+  document.getElementById('rprev-sub').textContent=`${r.code} · ${r.camp}`;
+  document.getElementById('rprev-body').innerHTML=buildReportHTML(r);
+  go('s-rep-preview');nav('n-reports');
+}
+
+function openCampaignReport(campKey){
+  const key=campKey||currentCampKey;const c=CAMPAIGNS[key];if(!c){showToast('⚠ Campanha não encontrada');return;}
+  rprevBack='s-reports';
+  const sheets=c.pointCodes.map(code=>getReportData(code)).filter(Boolean).map(r=>buildReportHTML(r)).join('');
+  document.getElementById('rprev-sub').textContent=`${c.campLabel} · ${c.pointCodes.length} pontos`;
+  document.getElementById('rprev-body').innerHTML=sheets||'<div style="padding:20px;text-align:center;font-family:\'Space Mono\',monospace;font-size:12px;color:var(--sub)">Nenhum dado disponível</div>';
+  go('s-rep-preview');nav('n-reports');
+}
+
+function openCampaignReportFromFilter(){
+  const camp=document.getElementById('rep-camp')?.value;
+  if(camp){openCampaignReport(camp);return;}
+  if(!repPtSel.size){showToast('⚠ Selecione pontos ou campanha');return;}
+  rprevBack='s-reports';
+  const sheets=[...repPtSel].map(code=>getReportData(code)).filter(Boolean).map(r=>buildReportHTML(r)).join('');
+  document.getElementById('rprev-sub').textContent=`Seleção personalizada · ${repPtSel.size} pontos`;
+  document.getElementById('rprev-body').innerHTML=sheets||'<div style="padding:20px;text-align:center">Nenhum dado disponível</div>';
+  go('s-rep-preview');nav('n-reports');
+}
+
+function openCurrentRepPDF(){openReportPreview(currentRepCode,'s-rep-detail');}
+function printReport(){window.print();}
 
 // ═══ CALENDAR ═══
 const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
